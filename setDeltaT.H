@@ -54,6 +54,17 @@ if (adjustTimeStep)
     }
     else if(timeStepDecrease == true) //time step is decreased
     {
+      if (runTime.deltaT().value() - minDeltaT < VSMALL)
+      {
+        pc.write();
+        Ts.write();
+        ws.write();
+        Crel.write();
+    
+        FatalError
+          << "Cannot decrease time step further. Dumping fields and exiting..." 
+          << abort(FatalError);
+      }
       Info << "Decreasing time step..." 
            << max
               (

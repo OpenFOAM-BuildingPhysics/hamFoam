@@ -4,6 +4,9 @@ word pcEqnForm =
 Switch adjustTimeStep =
 	runTime.controlDict().lookupOrDefault<Switch>("adjustTimeStep",true);
 
+scalar minCrel =
+    runTime.controlDict().lookupOrDefault<scalar>("minCrel", VSMALL); 
+
 //Picard iteration controls
 const dictionary& picardDict = runTime.controlDict().subDict("Picard");
 

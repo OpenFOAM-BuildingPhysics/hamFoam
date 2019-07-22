@@ -45,6 +45,9 @@ forAll(Materials, MaterialsI)
     }
 }
 
+dimensionedScalar minCrel_("minCrel_", dimensionSet(0, -2, 2, 0, 0, 0, 0), minCrel);
+Crel = max(Crel, minCrel_);
+
 ws.correctBoundaryConditions();
 Crel.correctBoundaryConditions();
 Krel.correctBoundaryConditions();
