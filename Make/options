@@ -1,10 +1,10 @@
 EXE_INC = \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
-    -I../urbanMicroclimateFoam/_LIB/buildingMaterialModel/lnInclude \
+    -I_LIB/buildingMaterialModel/lnInclude \
     -I_LIB/externalLoadModel/lnInclude
 
 EXE_LIBS = \
     -lfiniteVolume \
-	$(FOAM_USER_LIBBIN)/libbuildingMaterialModel.so \
+	$(FOAM_USER_LIBBIN)/libHAMbuildingMaterialModel.so \
 	$(FOAM_USER_LIBBIN)/libHAMexternalLoad.so

@@ -5,3 +5,4 @@ makeType=${1:-libso}
 set -x
 
 wmake $makeType externalLoadModel
+wmake $makeType buildingMaterialModel
