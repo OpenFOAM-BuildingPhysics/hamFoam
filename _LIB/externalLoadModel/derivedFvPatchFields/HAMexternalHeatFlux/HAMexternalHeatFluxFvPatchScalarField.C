@@ -151,35 +151,36 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             );  
             
     const polyPatch& p = this->patch().patch();
+    const word& patchName = this->patch().name();
     const polyMesh& mesh = p.boundaryMesh().mesh();
     Time& time = const_cast<Time&>(mesh.time());
     interpolationTable<scalar> Tambient
     (
-        "$FOAM_CASE/0/Tambient"
+        "$FOAM_CASE/0/" + patchName + "/Tambient"
     ); 
     interpolationTable<scalar> alpha
     (
-        "$FOAM_CASE/0/alpha"
+        "$FOAM_CASE/0/" + patchName + "/alpha"
     ); 
     interpolationTable<scalar> rad
     (
-        "$FOAM_CASE/0/rad"
+        "$FOAM_CASE/0/" + patchName + "/rad"
     );
     interpolationTable<scalar> beta
     (
-        "$FOAM_CASE/0/beta"
+        "$FOAM_CASE/0/" + patchName + "/beta"
     );
     interpolationTable<scalar> pv_o
     (
-        "$FOAM_CASE/0/pv_o"
+        "$FOAM_CASE/0/" + patchName + "/pv_o"
     ); 
     interpolationTable<scalar> gl
     (
-        "$FOAM_CASE/0/gl"
+        "$FOAM_CASE/0/" + patchName + "/gl"
     );
     interpolationTable<scalar> rainTemp
     (
-        "$FOAM_CASE/0/rainTemp"
+        "$FOAM_CASE/0/" + patchName + "/rainTemp"
     );            
 
     scalarField q_conv = alpha(time.value())*(Tambient(time.value())-Tp);

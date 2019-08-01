@@ -146,23 +146,24 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
             );            
 
     const polyPatch& p = this->patch().patch();
+    const word& patchName = this->patch().name();
     const polyMesh& mesh = p.boundaryMesh().mesh();
     Time& time = const_cast<Time&>(mesh.time());
     interpolationTable<scalar> Tambient
     (
-        "$FOAM_CASE/0/Tambient"
+        "$FOAM_CASE/0/" + patchName + "/Tambient"
     ); 
     interpolationTable<scalar> beta
     (
-        "$FOAM_CASE/0/beta"
+        "$FOAM_CASE/0/" + patchName +  "/beta"
     ); 
     interpolationTable<scalar> pv_o
     (
-        "$FOAM_CASE/0/pv_o"
+        "$FOAM_CASE/0/" + patchName +  "/pv_o"
     ); 
     interpolationTable<scalar> gl
     (
-        "$FOAM_CASE/0/gl"
+        "$FOAM_CASE/0/" + patchName +  "/gl"
     ); 
 
     scalarField pvsat_s = exp(6.58094e1-7.06627e3/Ts-5.976*log(Ts));
