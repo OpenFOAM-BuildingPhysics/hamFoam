@@ -28,6 +28,7 @@ License
 #include "fvPatchFieldMapper.H"
 #include "volFields.H"
 #include "mappedPatchBase.H"
+#include "uniformDimensionedFields.H"
 
 #include "interpolationTable.H"
 
@@ -176,13 +177,21 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
         K_pt = patch().lookupPatchField<volScalarField, scalar>("K_pt");                 
     scalarField X = K_pt*fieldTs.snGrad();
     //////////////////////////////////
-    
-    refGrad() = (g_conv + gl_ - X)/(Krel+K_v);
+
+    //-- Gravity flux --//
+    //lookup gravity vector
+    uniformDimensionedVectorField g = db().lookupObject<uniformDimensionedVectorField>("g");
+    scalarField gn = g.value() & patch().nf();
+
+    scalarField phiG = Krel*rhol*gn;
+    //////////////////////////////////
+
+    refGrad() = (g_conv + gl_ + phiG - X)/(Krel+K_v);
     refValue() =  -500.0 + 1.0;
     
     forAll(valueFraction(),faceI)
     {
-        if(pcp[faceI] > -500.0 && gl_ > 0.0 && (gl_ > g_cond[faceI] - g_conv[faceI] + X[faceI]) )
+        if(pcp[faceI] > -500.0 && gl_ > 0.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )
         {
             valueFraction()[faceI] = 1.0;
         }

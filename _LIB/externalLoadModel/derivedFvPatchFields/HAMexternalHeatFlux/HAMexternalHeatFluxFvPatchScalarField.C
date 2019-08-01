@@ -28,6 +28,7 @@ License
 #include "fvPatchFieldMapper.H"
 #include "volFields.H"
 #include "mappedPatchBase.H"
+#include "uniformDimensionedFields.H"
 
 #include "interpolationTable.H"
 
@@ -189,6 +190,14 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);    
     scalarField LE = (cap_v*(Tp-Tref)+L_v)*g_conv;//Latent and sensible heat transfer due to vapor exchange    
     
+    //-- Gravity-enthalpy flux --//
+    //lookup gravity vector
+    uniformDimensionedVectorField g = db().lookupObject<uniformDimensionedVectorField>("g");
+    scalarField gn = g.value() & patch().nf();
+
+    scalarField phiG = Krel*rhol*gn;
+    scalarField phiGT = (cap_l*(Tp-Tref))*phiG;
+
     // term with capillary moisture gradient:                          
     scalarField X = ((cap_l*(Tp-Tref)*Krel)+(cap_v*(Tp-Tref)+L_v)*K_v)*fieldpc.snGrad();
     // moisture flux term with temperature gradient:               
@@ -203,7 +212,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
         forAll(CR,faceI)
         {
             scalar rainFlux = 0;
-            if(pc[faceI] > -500.0 && (gl_ > g_cond[faceI] - g_conv[faceI] + Xmoist[faceI]) )
+            if(pc[faceI] > -500.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
             {
                 rainFlux = g_cond[faceI];
             }
@@ -215,7 +224,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
         }
     }    
     
-    refGrad() = (q_conv + LE + rad(time.value()) + CR - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
+    refGrad() = (q_conv + LE + rad(time.value()) + CR + phiGT - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
     refValue() =  0;
     valueFraction() = 0.0;
 
