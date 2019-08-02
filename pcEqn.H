@@ -11,7 +11,7 @@ surfaceScalarField phiG =  (fvc::interpolate(Krel,"Krel")*rhol*g) & mesh.Sf();
 
 if(pcEqnForm == "mixed")
 {
-    //using mixed form for moisture equation - see suGWFoam
+    //using mixed form for moisture equation - see suGWFoam http://water.engr.psu.edu/liu/openFOAM-suGWFoam.html
     dimensionedScalar rDeltaT = 1.0/runTime.deltaT();
     volScalarField pc_ss = rDeltaT*(ws_old - ws_n); //additional source term appearing due to dw/dt 
 

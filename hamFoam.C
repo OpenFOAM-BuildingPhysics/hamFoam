@@ -25,8 +25,14 @@ Application
     hamFoam
 
 Description
-    Solves for heat and moisture transport in building materials
-    Written by Aytac Kubilay, 2014, ETH Zurich/Empa
+    Solves for coupled heat and moisture transport in porous building materials
+    Written in 2014, ETH Zurich/Empa
+
+    Contributions:
+    Aytac Kubilay, aytac.kubilay@empa.ch, akubilay@ethz.ch
+    Andrea Ferrari, andferra@ethz.ch
+
+    Latest Update: 01.08.2019
 
 \*---------------------------------------------------------------------------*/
 

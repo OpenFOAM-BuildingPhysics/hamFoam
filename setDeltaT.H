@@ -25,7 +25,7 @@ Global
     setDeltaT
 
 Description
-    Reset the timestep to maintain a constant maximum courant Number.
+    Reset the timestep based on Picard iteration.
     Reduction of time-step is immediate, but increase is damped to avoid
     unstable oscillations.
 

@@ -24,65 +24,23 @@ License
 Class
     Foam::HAMexternalMoistureFluxFvPatchScalarField
 
-Group
-    grpThermoBoundaryConditions grpWallBoundaryConditions
-
 Description
-    This boundary condition supplies a heat flux condition for temperature
-    on an external wall. Optional thin thermal layer resistances can be
-    specified through thicknessLayers and kappaLayers entries for the
-    fixed heat transfer coefficient mode.
+    This boundary condition supplies a moisture flux condition based on:
+    - convective moisture flux
+    - rain flux
 
-    The condition can operate in two modes:
-    - fixed heat transfer coefficient: supply h and Ta
-    - fixed heat flux: supply q
-
-    where:
-    \vartable
-        h  | heat transfer coefficient [W/m2/K]
-        Ta | ambient temperature [K]
-        q  | heat flux [W/m2]
-    \endvartable
-
-    The thermal conductivity, \c kappa, can either be retrieved from the
-    mesh database using the \c lookup option, or from a \c solidThermo
-    thermophysical package.
-
-
-    \heading Patch usage
-
-    \table
-        Property     | Description             | Required    | Default value
-        kappa        | thermal conductivity option | yes     |
-        q            | heat flux [W/m2]            | yes*    |
-        Ta           | ambient temperature [K]     | yes*    |
-        h            | heat transfer coefficient [W/m/K] | yes*|
-        thicknessLayers | list of thicknesses per layer [m] | yes |
-        kappaLayers  | list of thermal conductivites per layer [W/m/K] | yes |
-        kappaName    | name of thermal conductivity field | yes  |
-        QrName       | name of the radiative field | no | no
-    \endtable
-
-    Example of the boundary condition specification:
-    \verbatim
-    myPatch
-    {
-        type            HAMexternalMoistureFlux;
-        kappa           fluidThermo;
-        q               uniform 1000;
-        Ta              uniform 300.0;
-        h               uniform 10.0;
-        thicknessLayers (0.1 0.2 0.3 0.4);
-        kappaLayers     (1 2 3 4)
-        value           uniform 300.0;
-        kappaName       none;
-        QrName          none;
-    }
-    \endverbatim
-
-Note
-  - Only supply \c h and \c Ta, or \c q in the dictionary (see above)
-  - kappa entries can be: fluidThermo, solidThermo or lookup
+    Example usage:
+        patchName
+        {
+            type            HAMexternalMoistureFlux;
+            value           uniform -1E7;
+        }
+    
+    Input files are provided under subfolder 0/patchName/
+    - Tambient: ambient air temperature
+    - beta: convective moisture transfer coefficient
+    - pv_o: exterior vapor pressure
+    - gl: rain flux
 
 SourceFiles
     HAMexternalMoistureFluxFvPatchScalarField.C

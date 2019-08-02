@@ -213,7 +213,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
         forAll(CR,faceI)
         {
             scalar rainFlux = 0;
-            if(pc[faceI] > -500.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
+            if(pc[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
             {
                 rainFlux = g_cond[faceI];
             }
@@ -239,9 +239,6 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::write
 ) const
 {
     mixedFvPatchScalarField::write(os);
-    //os.writeKeyword("pc")<< pcName_ << token::END_STATEMENT << nl;
-    //os.writeKeyword("T")<< TName_ << token::END_STATEMENT << nl;
-
 }
 
 
