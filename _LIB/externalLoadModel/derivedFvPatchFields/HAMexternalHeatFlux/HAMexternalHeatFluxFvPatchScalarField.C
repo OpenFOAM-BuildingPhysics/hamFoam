@@ -215,7 +215,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             scalar rainFlux = 0;
             if(pc[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
             {
-                rainFlux = g_cond[faceI];
+                rainFlux = g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI];
             }
             else
             {
