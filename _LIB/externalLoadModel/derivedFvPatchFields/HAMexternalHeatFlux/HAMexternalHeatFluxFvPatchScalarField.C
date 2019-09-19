@@ -221,7 +221,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             {
                 rainFlux = gl_;
             }
-            CR = rainFlux * cap_l*(rainTemp(time.value()) - Tref);
+            CR[faceI] = rainFlux * cap_l*(rainTemp(time.value()) - Tref);
         }
     }    
     
