@@ -10,6 +10,8 @@ Soil/Soil.C
 HamstadConcrete/HamstadConcrete.C
 SabaBrickMod/SabaBrickMod.C
 SabaBrick/SabaBrick.C
+MichelaBrick/MichelaBrick.C
+Meule/Meule.C
 CalciumSilicate/CalciumSilicate.C
 AsphaltConcrete/AsphaltConcrete.C
 PorousAsphalt/PorousAsphalt.C

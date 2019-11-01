@@ -24,7 +24,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "Savonnieres.H"
+#include "Meule.H"
 #include "addToRunTimeSelectionTable.H"
 #include "surfaceFields.H"
 
@@ -34,12 +34,12 @@ namespace Foam
 {
 namespace buildingMaterialModels
 {
-    defineTypeNameAndDebug(Savonnieres, 0);
+    defineTypeNameAndDebug(Meule, 0);
 
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-        Savonnieres,
+        Meule,
         dictionary
     );
 }
@@ -51,7 +51,7 @@ namespace buildingMaterialModels
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::buildingMaterialModels::Savonnieres::Savonnieres
+Foam::buildingMaterialModels::Meule::Meule
 (
     const word& name,
     const dictionary& buildingMaterialDict,
@@ -67,12 +67,12 @@ Foam::buildingMaterialModels::Savonnieres::Savonnieres
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 //- Correct the buildingMaterial moisture content (cell)
-void Foam::buildingMaterialModels::Savonnieres::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
+void Foam::buildingMaterialModels::Meule::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
-    List<scalar> reta; reta.setSize(3); reta[0]=-8e-7; reta[1]=-7e-6; reta[2]=-1.3e-4; //reta[3]=-6.5e-4; reta[4]=-6.5e-4; 
-    List<scalar> retn; retn.setSize(3); retn[0]=4.27; retn[1]=1.98; retn[2]=1.85; //retn[3]=4.00; retn[4]=4.00;
-    List<scalar> retm; retm.setSize(3); retm[0]=0.765807963; retm[1]=0.494949495; retm[2]=0.459459459; //retm[3]=0.75; retm[4]=0.75;
-    List<scalar> retw; retw.setSize(3); retw[0]=0.243243243; retw[1]=0.45945946; retw[2]=0.297297; //retw[3]=0; retw[4]=0; //the last 2 are zero for wetting retention curve
+    List<scalar> reta; reta.setSize(3); reta[0]=-1.18E-07; reta[1]=-3.02E-05; reta[2]=-4.03E-05; //reta[3]=-6.5e-4; reta[4]=-6.5e-4; 
+    List<scalar> retn; retn.setSize(3); retn[0]=1.7591; retn[1]=1.4392; retn[2]=8.3748; //retn[3]=4.00; retn[4]=4.00;
+    List<scalar> retm; retm.setSize(3); retm[0]=0.431527485646069; retm[1]=0.305169538632574; retm[2]=0.880594163442709; //retm[3]=0.75; retm[4]=0.75;
+    List<scalar> retw; retw.setSize(3); retw[0]=0.0627; retw[1]=0.4583; retw[2]=0.479; //retw[3]=0; retw[4]=0; //the last 2 are zero for wetting retention curve
     scalar w_tmp = 0; scalar tmp = 0; scalar C_tmp = 0; scalar tmp2 = 0;    
     for (int i=0; i<=2; i++)
     {
@@ -81,12 +81,12 @@ void Foam::buildingMaterialModels::Savonnieres::update_w_C_cell(const volScalarF
         tmp2 = pow( (1 + tmp) , retm[i] );
         C_tmp = C_tmp - retw[i]/tmp2 * retm[i]*retn[i]*tmp/((1 + tmp)*pc.internalField()[celli]); 
     } 
-    w.ref()[celli] = w_tmp*151.1;   
-    Crel.ref()[celli] = mag( C_tmp*151.1);   
+    w.ref()[celli] = w_tmp*120;   
+    Crel.ref()[celli] = mag( C_tmp*120);   
 }
 
 //- Correct the buildingMaterial liquid permeability (cell)
-void Foam::buildingMaterialModels::Savonnieres::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
+void Foam::buildingMaterialModels::Meule::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 {
     scalar logpc = log10(-pc.internalField()[celli]);
     scalar logKl = 0;
@@ -98,13 +98,13 @@ void Foam::buildingMaterialModels::Savonnieres::update_Krel_cell(const volScalar
         6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8, 6.9,
         7.0, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9,
         8.0}; 
-    double logKl_M[]={-8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031,
-        -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -8.92031, -9.10993, -9.29955, -9.48917, -9.67878,
-        -9.86840, -10.05802, -10.20404, -10.36062, -10.51784, -10.66534, -10.79367, -10.89774, -10.98052, -11.05351,
-        -11.13250, -11.23167, -11.35936, -11.51671, -11.69890, -11.89729, -12.10000, -12.28796, -12.42838, -12.49323,
-        -12.52694, -12.64220, -12.89477, -13.24069, -13.61463, -13.97776, -14.31352, -14.61724, -14.89090, -15.14002,
-        -15.37108, -15.58977, -15.80040, -16.00594, -16.20828, -16.40864, -16.60776, -16.80609, -17.00390, -17.20136,
-        -17.39859};
+    double logKl_M[]={-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,
+        -9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,-9.38094,
+        -9.38094,-9.38094,-9.38094,-9.38094,-10.02248,-11.10520,-11.80445,-12.13155,-12.32853,-12.50635,
+        -12.68751,-12.87353,-13.06252,-13.25247,-13.44183,-13.62949,-13.81470,-13.99691,-14.17569,-14.35060,
+        -14.52106,-14.68622,-14.84494,-14.99576,-15.13729,-15.26879,-15.39113,-15.50738,-15.62248,-15.74188,
+        -15.86980,-16.00827,-16.15708,-16.31450,-16.47824,-16.64605,-16.81611,-16.98705,-17.15796,-17.32825,
+        -17.49757};
 
     if (logpc < scalar(2.0))
     {
@@ -131,7 +131,7 @@ void Foam::buildingMaterialModels::Savonnieres::update_Krel_cell(const volScalar
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
-void Foam::buildingMaterialModels::Savonnieres::update_Kv_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, label& celli)
+void Foam::buildingMaterialModels::Meule::update_Kv_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, label& celli)
 {
     scalar rho_l = 1.0e3; 
     scalar R_v = 8.31451*1000/(18.01534); 
@@ -139,14 +139,14 @@ void Foam::buildingMaterialModels::Savonnieres::update_Kv_cell(const volScalarFi
     scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
     scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
     
-    scalar tmp = 1 - (w.internalField()[celli]/151.1); 
-    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*90.7*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient [s]
+    scalar tmp = 1 - (w.internalField()[celli]/120); 
+    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*100*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient [s]
     
     K_v.ref()[celli] = (delta*p_vsat*relhum)/(rho_l*R_v*T.internalField()[celli]);
 }
 
 //- Correct the buildingMaterial K_pt (cell)
-void Foam::buildingMaterialModels::Savonnieres::update_Kpt_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_pt, label& celli)
+void Foam::buildingMaterialModels::Meule::update_Kpt_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_pt, label& celli)
 {
     scalar rho_l = 1.0e3; 
     scalar R_v = 8.31451*1000/(18.01534); 
@@ -157,8 +157,8 @@ void Foam::buildingMaterialModels::Savonnieres::update_Kpt_cell(const volScalarF
         
     scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
     
-    scalar tmp = 1 - (w.internalField()[celli]/151.1); 
-    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*90.7*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient [s]
+    scalar tmp = 1 - (w.internalField()[celli]/120); 
+    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*100*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient [s]
 
     K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
 }
