@@ -6,6 +6,9 @@ Switch adjustTimeStep =
 
 scalar minCrel =
     runTime.controlDict().lookupOrDefault<scalar>("minCrel", VSMALL); 
+    
+bool debugFluxes =
+    runTime.controlDict().lookupOrDefault<bool>("debugFluxes", false); 
 
 //Picard iteration controls
 const dictionary& picardDict = runTime.controlDict().subDict("Picard");

@@ -38,6 +38,8 @@ Description
 
 #include "fvCFD.H"
 #include "buildingMaterialModel.H"
+#include "mixedFvPatchFields.H"
+#include "interpolationTable.H"  
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -125,6 +127,10 @@ int main(int argc, char *argv[])
                     ws_n = ws; ws_n.boundaryFieldRef().updateCoeffs();
                     Ts_n = Ts; Ts_n.boundaryFieldRef().updateCoeffs();
                     Info << "Total Picard iterations: " << nIterPicard << endl;
+                    if (debugFluxes)
+                    {
+                        #include "debugFluxes.H"
+                    }
                     timeStepDecrease = false;
                     runTime++;
                     #include "setDeltaT.H"
