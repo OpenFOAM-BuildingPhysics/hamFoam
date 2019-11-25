@@ -46,15 +46,14 @@ forAll(patchSet, i)
     const scalarField& V = mesh.V();
 
     scalar A = 0; scalar B = 0; scalar C = 0;
-    forAll(pcFvPatch.valueFraction(), patchi)
+
+    if(gMax(pcFvPatch.valueFraction())>0)
     {
-        if(pcFvPatch.valueFraction()[patchi] == 1)
-        {
-            scalar gl_ = gl(currentTime);
-            A += gSum(gl_-(KrelPatch+K_vPatch)*pcFvPatch.snGrad())*currentTimeStep;
-        }    
+        scalar gl_ = gl(currentTime);
+        scalarField runoff = (gl_ - (KrelPatch+K_vPatch)*pcFvPatch.snGrad()) * pcFvPatch.valueFraction();
+        A = ( gSum(runoff*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
     }
-    
+
     B = gSum(ws*V)/gSum(patch.magSf());
     C = ( gSum(evap*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
 
