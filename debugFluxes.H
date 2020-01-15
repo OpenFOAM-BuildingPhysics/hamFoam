@@ -53,9 +53,11 @@ forAll(patchSet, i)
         scalarField runoff = (gl_ - (KrelPatch+K_vPatch)*pcFvPatch.snGrad()) * pcFvPatch.valueFraction();
         A = ( gSum(runoff*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
     }
-
+    else
+    {
+        C = ( gSum(evap*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
+    }
     B = gSum(ws*V)/gSum(patch.magSf());
-    C = ( gSum(evap*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
 
     Info << patch.name() << " | time, runoff, abs, evap: " << runTime.time().value() << " " << A << " " << B << " " << C << endl;
 }
