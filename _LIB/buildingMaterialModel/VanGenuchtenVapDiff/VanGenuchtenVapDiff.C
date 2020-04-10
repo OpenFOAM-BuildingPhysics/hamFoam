@@ -167,7 +167,7 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kv_cell(const vol
         {
            scalar rho_l = 1.0e3;
            scalar R_v = 8.31451*1000/(18.01534);
-           A_ = max(1.0,A_);
+           A_ = min(1.0,A_);
            scalar B_ = 1.0 - A_;
 
            scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
@@ -195,7 +195,7 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kpt_cell(const vo
            scalar rho_l = 1.0e3;
            scalar R_v = 8.31451*1000/(18.01534);
            scalar L_v = 2.5e6;
-           A_ = max(1.0,A_);
+           A_ = min(1.0,A_);
            scalar B_ = 1.0 - A_;
 
            scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
