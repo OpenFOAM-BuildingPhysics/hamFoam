@@ -157,12 +157,17 @@ int main(int argc, char *argv[])
                 }               
             ///////////////////////////////
         }        
-        
-        runTime.write();    
 
-        Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
+        runTime.write();    
+        
+        if (runTime.writeTime())
+        {
+        Info<< "Time = " << runTime.value() << " s"
+            << "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
+        }
+    
     }
 
     Info<< "End\n" << endl;
