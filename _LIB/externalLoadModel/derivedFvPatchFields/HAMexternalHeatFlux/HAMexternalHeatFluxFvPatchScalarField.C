@@ -209,11 +209,13 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     scalar gl_ = gl(time.value());
     if(gl_ > 0)
     {
-        scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
+        //scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
+        scalarField g_cond = (Krel+K_v)*(-10.0-fieldpc.patchInternalField())*patch().deltaCoeffs();       
         forAll(CR,faceI)
         {
             scalar rainFlux = 0;
-            if(pc[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
+            //if(pc[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
+            if( (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
             {
                 rainFlux = g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI];
             }
