@@ -122,27 +122,16 @@ void Foam::buildingMaterialModels::VanGenuchten::update_Krel_cell(const volScala
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
-void Foam::buildingMaterialModels::VanGenuchten::update_Kv_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, label& celli)
+void Foam::buildingMaterialModels::VanGenuchten::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
     scalar m_ = 1.0 - 1.0/n_;
+    scalar rho_l = 1.0e3;
+    scalar L_v = 2.5e6;    
 
     scalar tmp = w.internalField()[celli]/wcap_;
     scalar tmp2 = pow(1-pow(tmp,1/m_),2*m_);
     K_v.ref()[celli] = Ks_*(Foam::sqrt(1-tmp))*tmp2;
-}
-
-//- Correct the buildingMaterial K_pt (cell)
-void Foam::buildingMaterialModels::VanGenuchten::update_Kpt_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_pt, label& celli)
-{
-
-        scalar m_ = 1.0 - 1.0/n_;
-        scalar rho_l = 1.0e3;
-        scalar L_v = 2.5e6;
-
-        scalar tmp = w.internalField()[celli]/wcap_;
-        scalar tmp2 = pow(1-pow(tmp,1/m_),2*m_);
-        scalar Kv = Ks_*(Foam::sqrt(1-tmp))*tmp2;
-        K_pt.ref()[celli] = (Kv/T.internalField()[celli]) * (rho_l*L_v - pc.internalField()[celli]);
+    K_pt.ref()[celli] = (K_v.ref()[celli]/T.internalField()[celli]) * (rho_l*L_v - pc.internalField()[celli]);
 }
 
 //*********************************************************** //
