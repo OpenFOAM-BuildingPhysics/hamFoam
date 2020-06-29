@@ -155,7 +155,7 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Krel_cell(const v
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
-void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kv_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, label& celli)
+void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
 
     if(muDry_ == 0.0)
@@ -167,6 +167,8 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kv_cell(const vol
         {
            scalar rho_l = 1.0e3;
            scalar R_v = 8.31451*1000/(18.01534);
+           scalar L_v = 2.5e6;
+                      
            A_ = min(1.0,A_);
            scalar B_ = 1.0 - A_;
 
@@ -177,35 +179,8 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kv_cell(const vol
            scalar tmp3 = 1 - ((w.internalField()[celli]-wr_)/(wcap_-wr_));
            scalar delta = 2.61e-5 * tmp3/(R_v*T.internalField()[celli]*muDry_*(A_*tmp3*tmp3 + B_)); // Water vapour diffusion coefficient
            K_v.ref()[celli] = (delta*p_vsat*relhum)/(rho_l*R_v*T.internalField()[celli]);
-    }
-
-}
-
-//- Correct the buildingMaterial K_pt (cell)
-void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kpt_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_pt, label& celli)
-{
-
-        if(muDry_ == 0.0)
-        {
-           Info << "Specify mudry != 0.0 or use VanGenuchten" << endl;
-           Foam::FatalError.exit();
-        }
-        else
-        {
-           scalar rho_l = 1.0e3;
-           scalar R_v = 8.31451*1000/(18.01534);
-           scalar L_v = 2.5e6;
-           A_ = min(1.0,A_);
-           scalar B_ = 1.0 - A_;
-
-           scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
-
-           scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
-
-           scalar tmp3 = 1 - ((w.internalField()[celli]-wr_)/(wcap_-wr_));
-           scalar delta = 2.61e-5 * tmp3/(R_v*T.internalField()[celli]*muDry_*(A_*tmp3*tmp3 + B_)); // Water vapour diffusion coefficient
            K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) )*(rho_l*L_v - pc.internalField()[celli]);
-        }
+    }
 
 }
 

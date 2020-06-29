@@ -149,10 +149,7 @@ public:
         virtual void update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli) = 0;
 
         //- Correct the buildingMaterial vapor permeability (cell)
-        virtual void update_Kv_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, label& celli) = 0;
-
-        //- Correct the buildingMaterial vapor permeability (cell)
-        virtual void update_Kpt_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_pt, label& celli) = 0;
+        virtual void update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli) = 0;
 
 };
 

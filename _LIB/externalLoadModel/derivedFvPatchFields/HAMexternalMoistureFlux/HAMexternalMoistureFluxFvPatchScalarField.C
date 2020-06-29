@@ -171,7 +171,7 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
 
     scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);
     scalar gl_ = gl(time.value());
-    scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();  
+//    scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
 
     // term with temperature gradient:
     scalarField K_pt(pcp.size(), 0.0);
@@ -191,9 +191,11 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
 
     if(gl_ > 0)
     {     
+        scalarField g_cond = (Krel+K_v)*(-10.0-fieldpc.patchInternalField())*patch().deltaCoeffs();       
         forAll(valueFraction(),faceI)
         {  
-            if(pcp[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
+            //if(pcp[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
+            if( (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
             {
                 valueFraction()[faceI] = 1.0;
             }
@@ -201,7 +203,8 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
     }
 
     refGrad() = (g_conv + gl_ + phiG - X)/(Krel+K_v);
-    refValue() =  -100.0 + 1.0;
+//    refValue() =  -100.0 + 1.0;
+    refValue() =  -10.0;
 
     mixedFvPatchScalarField::updateCoeffs();
 }
