@@ -24,7 +24,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "VanGenuchten.H"
+#include "SBPO.H"
 #include "addToRunTimeSelectionTable.H"
 #include "surfaceFields.H"
 
@@ -34,12 +34,12 @@ namespace Foam
 {
 namespace buildingMaterialModels
 {
-    defineTypeNameAndDebug(VanGenuchten, 0);
+    defineTypeNameAndDebug(SBPO, 0);
 
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-        VanGenuchten,
+		SBPO,
         dictionary
     );
 }
@@ -51,88 +51,40 @@ namespace buildingMaterialModels
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::buildingMaterialModels::VanGenuchten::VanGenuchten
+Foam::buildingMaterialModels::SBPO::SBPO
 (
     const word& name,
     const dictionary& buildingMaterialDict,
     const word& cellZoneModel
 )
 :
-    buildingMaterialModel(name, buildingMaterialDict, cellZoneModel),
-    VanGenuchtenCoeffs_(buildingMaterialDict),
-    wcap_
-    (
-       readScalar
-       (
-          VanGenuchtenCoeffs_.lookup("wcap")
-       )
-   ),
-
-    n_
-    (
-       readScalar
-       (
-          VanGenuchtenCoeffs_.lookup("n")
-       )
-   ),
-
-    alpha_
-    (
-       readScalar
-       (
-          VanGenuchtenCoeffs_.lookup("alpha")
-       )
-   ),
-
-   Ks_
-   (
-       readScalar
-       (
-          VanGenuchtenCoeffs_.lookup("Ks")
-       )
-   )
+    buildingMaterialModel(name, buildingMaterialDict, cellZoneModel)
 {
-
+    
 }
 
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 //- Correct the buildingMaterial moisture content (cell)
-void Foam::buildingMaterialModels::VanGenuchten::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
+void Foam::buildingMaterialModels::SBPO::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
-
-   scalar m_ = 1.0 - 1.0/n_;
-   scalar tmp = pow(-alpha_*pc.internalField()[celli], n_);
-   w.ref()[celli] = wcap_*pow(1+tmp,-m_);
-   scalar tmp2 = 1+tmp;
-   Crel.ref()[celli] = mag(-wcap_*m_*n_*alpha_*pow(tmp2,-1-m_)*pow(-alpha_*pc.internalField()[celli],n_-1));
-
+	w.ref()[celli] = 0;
+	Crel.ref()[celli] = 0;
 }
 
 //- Correct the buildingMaterial liquid permeability (cell)
-void Foam::buildingMaterialModels::VanGenuchten::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
+void Foam::buildingMaterialModels::SBPO::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 {
-    scalar m_ = 1.0 - 1.0/n_;
-
-    scalar tmp = w.internalField()[celli]/wcap_;
-    scalar tmp2 = pow(1-pow(tmp,1/m_), m_);
-    Krel.ref()[celli] = Ks_*(Foam::sqrt(tmp))*pow(1-tmp2,2);
-
+	Krel.ref()[celli] = 0;
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
-void Foam::buildingMaterialModels::VanGenuchten::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
+void Foam::buildingMaterialModels::SBPO::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
+
 {
-    scalar m_ = 1.0 - 1.0/n_;
-    scalar rho_l = 1.0e3;
-    scalar L_v = 2.5e6;
-
-    scalar tmp = w.internalField()[celli]/wcap_;
-    scalar tmp2 = pow(1-pow(tmp,1/m_),2*m_);
-    K_v.ref()[celli] = Ks_*(Foam::sqrt(1-tmp))*tmp2;
-
-    K_pt.ref()[celli] = (K_v.ref()[celli]/T.internalField()[celli]) * (rho_l*L_v - pc.internalField()[celli]);
+	K_v.ref()[celli] = 4.99e-13;
+	K_pt.ref()[celli] = 4.99e-13;
 }
 
 //*********************************************************** //

@@ -168,7 +168,7 @@ void Foam::buildingMaterialModels::VanGenuchtenVapDiff::update_Kvap_cell(const v
            scalar rho_l = 1.0e3;
            scalar R_v = 8.31451*1000/(18.01534);
            scalar L_v = 2.5e6;
-                      
+      
            A_ = min(1.0,A_);
            scalar B_ = 1.0 - A_;
 

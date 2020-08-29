@@ -23,31 +23,26 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    Foam::buildingMaterialModels::Hamstad5Mortar
+    Foam::buildingMaterialModels::AcrylicPaint
 
 Description
-    buildingMaterial constitutive relationships as given in
-    HAMSTAD Benchmark case 5: capillary active inside insulation.
-   
-    References:
-    Hagentoft,  C-E.  (2002).  HAMSTAD  –  Final  report:  Methodology  
-    of  HAM-modeling, Report  R-02:8. Gothenburg, Department of Building 
-    Physics, Chalmers University of Technology.
+	buildingMaterial constitutive relationships as given in
+	Heat-Moisture Transport Simulations according to Cameliet
+	and Derome's research.
 
-    Hagentoft, C-E.; Kalagasidis, A.; Adl-Zarrabi, B.; Roels, S.; Carmeliet, J.; 
-    Hens, H; Grunewald, J.; Funk, M.;  Becker,  R.; Shamir,  D.;  Adan,  O.;  
-    Brocken,  H.; Kumaran,  K.;  Djebbar,  R.  (2004). Assessment  Method of 
-    Numerical Prediction Models for Combined Heat, Air and Moisture Transfer 
-    in Building Components:  Benchmarks  for  One-dimensional  Cases.  
-    Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
+    Reference:
+
+	Carmeliet, J., & Derome, D. (2011). Temperature Driven Inward Vapor Diffusion Under Constant
+	and Cyclic Loading in Small-Scale Wall Assemblies: Part 2 Heat-Moisture Transport Simulations.
+	Building and Environment. Vol. 47, pp. 161-169
 
 SourceFiles
-    Hamstad5Mortar.C
+    AcrylicPaint.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef Hamstad5Mortar_H
-#define Hamstad5Mortar_H
+#ifndef AcrylicPaint_H
+#define AcrylicPaint_H
 
 #include "buildingMaterialModel.H"
 #include "volFields.H"
@@ -60,10 +55,10 @@ namespace buildingMaterialModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class Hamstad5Mortar Declaration
+                           Class AcrylicPaint Declaration
 \*---------------------------------------------------------------------------*/
 
-class Hamstad5Mortar
+class AcrylicPaint
 :
     public buildingMaterialModel
 {
@@ -74,13 +69,13 @@ class Hamstad5Mortar
 public:
 
     //- Runtime type information
-    TypeName("Hamstad5Mortar");
+    TypeName("AcrylicPaint");
 
 
     // Constructors
 
         //- Construct from components
-        Hamstad5Mortar
+		AcrylicPaint
         (
             const word& name, 
             const dictionary& buildingMaterialDict,
@@ -90,7 +85,7 @@ public:
 
     // Destructor
 
-        ~Hamstad5Mortar()
+        ~AcrylicPaint()
         {}
 
 

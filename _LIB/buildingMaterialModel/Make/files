@@ -6,6 +6,17 @@ Hamstad5Brick/Hamstad5Brick.C
 Hamstad5Insulation/Hamstad5Insulation.C
 Hamstad5Mortar/Hamstad5Mortar.C
 HamstadConcrete/HamstadConcrete.C
+Hamstad1Insulation/Hamstad1Insulation.C
+Hamstad3Wall/Hamstad3Wall.C
+AcrylicPaint/AcrylicPaint.C
+BuildingPaper/BuildingPaper.C
+GlassFiberInsulation/GlassFiberInsulation.C
+GypsumBoard/GypsumBoard.C
+Masonry/Masonry.C
+OSB/OSB.C
+SBPO/SBPO.C
+VWC/VWC.C
+
 VanGenuchten/VanGenuchten.C
 VanGenuchtenVapDiff/VanGenuchtenVapDiff.C
 

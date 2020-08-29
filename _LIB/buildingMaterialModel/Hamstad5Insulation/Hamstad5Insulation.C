@@ -97,8 +97,8 @@ void Foam::buildingMaterialModels::Hamstad5Insulation::update_Krel_cell(const vo
 void Foam::buildingMaterialModels::Hamstad5Insulation::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
     scalar rho_l = 1.0e3; 
-    scalar R_v = 8.31451*1000/(18.01534);
-    scalar L_v = 2.5e6;     
+    scalar R_v = 8.31451*1000/(18.01534); 
+    scalar L_v = 2.5e6;
 
     scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
     scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
@@ -107,8 +107,7 @@ void Foam::buildingMaterialModels::Hamstad5Insulation::update_Kvap_cell(const vo
     scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*5.6*(0.8*tmp*tmp + 0.2)); // Water vapour diffusion coefficient "for brick" [s]
     
     K_v.ref()[celli] = (delta*p_vsat*relhum)/(rho_l*R_v*T.internalField()[celli]);
-    K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);    
+    K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
 }
-
 
 //*********************************************************** //

@@ -23,11 +23,11 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    Foam::buildingMaterialModels::Hamstad5Mortar
+    Foam::buildingMaterialModels::Hamstad3Wall
 
 Description
     buildingMaterial constitutive relationships as given in
-    HAMSTAD Benchmark case 5: capillary active inside insulation.
+    HAMSTAD Benchmark case 3: light weight wall.
    
     References:
     Hagentoft,  C-E.  (2002).  HAMSTAD  –  Final  report:  Methodology  
@@ -42,12 +42,12 @@ Description
     Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
 
 SourceFiles
-    Hamstad5Mortar.C
+    Hamstad3Wall.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef Hamstad5Mortar_H
-#define Hamstad5Mortar_H
+#ifndef Hamstad3Wall_H
+#define Hamstad3Wall_H
 
 #include "buildingMaterialModel.H"
 #include "volFields.H"
@@ -60,10 +60,10 @@ namespace buildingMaterialModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class Hamstad5Mortar Declaration
+                           Class Hamstad3Wall Declaration
 \*---------------------------------------------------------------------------*/
 
-class Hamstad5Mortar
+class Hamstad3Wall
 :
     public buildingMaterialModel
 {
@@ -74,13 +74,13 @@ class Hamstad5Mortar
 public:
 
     //- Runtime type information
-    TypeName("Hamstad5Mortar");
+    TypeName("Hamstad3Wall");
 
 
     // Constructors
 
         //- Construct from components
-        Hamstad5Mortar
+	Hamstad3Wall
         (
             const word& name, 
             const dictionary& buildingMaterialDict,
@@ -90,7 +90,7 @@ public:
 
     // Destructor
 
-        ~Hamstad5Mortar()
+        ~Hamstad3Wall()
         {}
 
 
