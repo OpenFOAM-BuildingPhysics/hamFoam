@@ -76,7 +76,7 @@ void Foam::buildingMaterialModels::VWC::update_w_C_cell(const volScalarField& pc
 //- Correct the buildingMaterial liquid permeability (cell)
 void Foam::buildingMaterialModels::VWC::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 {
-	Krel.ref()[celli] = SMALL;
+	Krel.ref()[celli] = 0;
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
@@ -90,11 +90,10 @@ void Foam::buildingMaterialModels::VWC::update_Kvap_cell(const volScalarField& p
 	scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3 / T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
 	scalar relhum = Foam::exp(pc.internalField()[celli] / (rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
 
-	//scalar tmp = 1 - (w.internalField()[celli] / 810);
 	scalar delta = 2.5e-14;
 
-	K_v.ref()[celli] = 2.5e-14;//(delta*p_vsat*relhum) / (rho_l*R_v*T.internalField()[celli]);
-    K_pt.ref()[celli] = 2.5e-14;//( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
+	K_v.ref()[celli] = (delta*p_vsat*relhum) / (rho_l*R_v*T.internalField()[celli]);
+    K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
 }
 
 //*********************************************************** //

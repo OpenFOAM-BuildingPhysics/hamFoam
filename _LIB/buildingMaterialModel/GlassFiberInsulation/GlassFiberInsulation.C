@@ -105,7 +105,7 @@ void Foam::buildingMaterialModels::GlassFiberInsulation::update_Kvap_cell(const 
 	scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3 / T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
 	scalar relhum = Foam::exp(pc.internalField()[celli] / (rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
 
-	scalar delta = a + pow(b, c*relhum) ; // Water vapour diffusion coefficient "for GlassFiberInsulation" [s]
+	scalar delta = a + b*Foam::exp(c*relhum); // Water vapour diffusion coefficient "for GlassFiberInsulation" [s]
 
 	K_v.ref()[celli] = (delta*p_vsat*relhum) / (rho_l*R_v*T.internalField()[celli]);
     K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
