@@ -120,7 +120,7 @@ public:
         void update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli);
 
         //- Correct the buildingMaterial vapor permeability (cell)
-        void update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli);   
+        void update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli);
 
 };
 

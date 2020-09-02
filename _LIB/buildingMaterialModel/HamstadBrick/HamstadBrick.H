@@ -26,12 +26,20 @@ Class
     Foam::buildingMaterialModels::HamstadBrick
 
 Description
-    buildingMaterial constitutive relationship as in HamstadBrick et al. (1977).
+    buildingMaterial constitutive relationships as given in
+    HAMSTAD Benchmark case 4: response analysis.
    
-    Reference:
-    HamstadBrick R, Vauclin M, Touma J, Wierenga P, Vachaud G. Comparision of numerical
-    simulation models for one dimensional infiltration. buildingMaterial Sci. Soc. Am J. 1977,
-    41:285-294
+    References:
+    Hagentoft,  C-E.  (2002).  HAMSTAD  –  Final  report:  Methodology  
+    of  HAM-modeling, Report  R-02:8. Gothenburg, Department of Building 
+    Physics, Chalmers University of Technology.
+
+    Hagentoft, C-E.; Kalagasidis, A.; Adl-Zarrabi, B.; Roels, S.; Carmeliet, J.; 
+    Hens, H; Grunewald, J.; Funk, M.;  Becker,  R.; Shamir,  D.;  Adan,  O.;  
+    Brocken,  H.; Kumaran,  K.;  Djebbar,  R.  (2004). Assessment  Method of 
+    Numerical Prediction Models for Combined Heat, Air and Moisture Transfer 
+    in Building Components:  Benchmarks  for  One-dimensional  Cases.  
+    Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
 
 SourceFiles
     HamstadBrick.C

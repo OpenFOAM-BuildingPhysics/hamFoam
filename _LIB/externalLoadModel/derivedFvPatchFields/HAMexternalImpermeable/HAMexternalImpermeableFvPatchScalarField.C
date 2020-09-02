@@ -23,7 +23,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "HAMexternalHeatFluxFvPatchScalarField.H"
+#include "HAMexternalImpermeableFvPatchScalarField.H"
 #include "addToRunTimeSelectionTable.H"
 #include "fvPatchFieldMapper.H"
 #include "volFields.H"
@@ -34,8 +34,8 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
+Foam::HAMexternalImpermeableFvPatchScalarField::
+HAMexternalImpermeableFvPatchScalarField
 (
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF
@@ -49,10 +49,10 @@ HAMexternalHeatFluxFvPatchScalarField
 }
 
 
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
+Foam::HAMexternalImpermeableFvPatchScalarField::
+HAMexternalImpermeableFvPatchScalarField
 (
-    const HAMexternalHeatFluxFvPatchScalarField& ptf,
+    const HAMexternalImpermeableFvPatchScalarField& ptf,
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF,
     const fvPatchFieldMapper& mapper
@@ -62,8 +62,8 @@ HAMexternalHeatFluxFvPatchScalarField
 {}
 
 
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
+Foam::HAMexternalImpermeableFvPatchScalarField::
+HAMexternalImpermeableFvPatchScalarField
 (
     const fvPatch& p,
     const DimensionedField<scalar, volMesh>& iF,
@@ -91,20 +91,20 @@ HAMexternalHeatFluxFvPatchScalarField
 }
 
 
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
+Foam::HAMexternalImpermeableFvPatchScalarField::
+HAMexternalImpermeableFvPatchScalarField
 (
-    const HAMexternalHeatFluxFvPatchScalarField& tppsf
+    const HAMexternalImpermeableFvPatchScalarField& tppsf
 )
 :
     mixedFvPatchScalarField(tppsf)
 {}
 
 
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
+Foam::HAMexternalImpermeableFvPatchScalarField::
+HAMexternalImpermeableFvPatchScalarField
 (
-    const HAMexternalHeatFluxFvPatchScalarField& tppsf,
+    const HAMexternalImpermeableFvPatchScalarField& tppsf,
     const DimensionedField<scalar, volMesh>& iF
 )
 :
@@ -114,7 +114,7 @@ HAMexternalHeatFluxFvPatchScalarField
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
+void Foam::HAMexternalImpermeableFvPatchScalarField::updateCoeffs()
 {
     if (updated())
     {
@@ -122,34 +122,29 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     }
 
     scalar rhol=1.0e3; scalar Rv=8.31451*1000/(18.01534);   
-    scalar cap_v = 1880; scalar Tref = 273.15; scalar L_v = 2.5e6; scalar cap_l = 4182;
 
-    scalarField& Tp = *this;
-    
-    scalarField lambda_m(Tp.size(), 0.0);
-        lambda_m = patch().lookupPatchField<volScalarField, scalar>("lambda_m");  
-    scalarField K_pt(Tp.size(), 0.0);
-        K_pt = patch().lookupPatchField<volScalarField, scalar>("K_pt"); 
-    scalarField Krel(Tp.size(), 0.0);
+    scalarField& pcp = *this;
+
+    scalarField Ts(pcp.size(), 0.0);
+        Ts = patch().lookupPatchField<volScalarField, scalar>("Ts");
+    scalarField Krel(pcp.size(), 0.0);
         Krel = patch().lookupPatchField<volScalarField, scalar>("Krel");
-    scalarField K_v(Tp.size(), 0.0);
-        K_v = patch().lookupPatchField<volScalarField, scalar>("K_v");                    
-    scalarField pc(Tp.size(), 0.0);
-        pc = patch().lookupPatchField<volScalarField, scalar>("pc");
+    scalarField K_v(pcp.size(), 0.0);
+        K_v = patch().lookupPatchField<volScalarField, scalar>("K_v");
     const fvPatchScalarField&
         fieldTs = refCast
             <const fvPatchScalarField>
             (
                 patch().lookupPatchField<volScalarField, scalar>("Ts")
             );
-                        
+            
     const fvPatchScalarField&
         fieldpc = refCast
             <const fvPatchScalarField>
             (
                 patch().lookupPatchField<volScalarField, scalar>("pc")
-            );  
-            
+            );            
+
     const polyPatch& p = this->patch().patch();
     const word& patchName = this->patch().name();
     const polyMesh& mesh = p.boundaryMesh().mesh();
@@ -158,93 +153,64 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     (
         "$FOAM_CASE/0/" + patchName + "/Tambient"
     ); 
-    interpolationTable<scalar> alpha
-    (
-        "$FOAM_CASE/0/" + patchName + "/alpha"
-    ); 
-    interpolationTable<scalar> rad
-    (
-        "$FOAM_CASE/0/" + patchName + "/rad"
-    );
     interpolationTable<scalar> beta
     (
-        "$FOAM_CASE/0/" + patchName + "/beta"
-    );
+        "$FOAM_CASE/0/" + patchName +  "/beta"
+    ); 
     interpolationTable<scalar> pv_o
     (
-        "$FOAM_CASE/0/" + patchName + "/pv_o"
+        "$FOAM_CASE/0/" + patchName +  "/pv_o"
     ); 
     interpolationTable<scalar> gl
     (
-        "$FOAM_CASE/0/" + patchName + "/gl"
-    );
-    interpolationTable<scalar> rainTemp
-    (
-        "$FOAM_CASE/0/" + patchName + "/rainTemp"
-    );            
+        "$FOAM_CASE/0/" + patchName +  "/gl"
+    ); 
 
-    scalarField q_conv = alpha(time.value())*(Tambient(time.value())-Tp);
+    scalarField pvsat_s = exp(6.58094e1-7.06627e3/Ts-5.976*log(Ts));
+    scalarField pv_s = pvsat_s*exp((pcp)/(rhol*Rv*Ts));
 
-    scalarField pvsat_s = exp(6.58094e1-7.06627e3/Tp-5.976*log(Tp));
-    scalarField pv_s = pvsat_s*exp((pc)/(rhol*Rv*Tp));
+    scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);
+    scalar gl_ = gl(time.value());
+//    scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
 
-    scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);    
-    scalarField LE = (cap_v*(Tp-Tref)+L_v)*g_conv;//Latent and sensible heat transfer due to vapor exchange    
-    
-    //-- Gravity-enthalpy flux --//
+    // term with temperature gradient:
+    scalarField K_pt(pcp.size(), 0.0);
+        K_pt = patch().lookupPatchField<volScalarField, scalar>("K_pt");                 
+    scalarField X = K_pt*fieldTs.snGrad();
+    //////////////////////////////////
+
+    //-- Gravity flux --//
     //lookup gravity vector
     uniformDimensionedVectorField g = db().lookupObject<uniformDimensionedVectorField>("g");
     scalarField gn = g.value() & patch().nf();
 
     scalarField phiG = Krel*rhol*gn;
-    scalarField phiGT = (cap_l*(Tp-Tref))*phiG;
+    //////////////////////////////////
 
-    // term with capillary moisture gradient:                          
-    scalarField X = ((cap_l*(Tp-Tref)*Krel)+(cap_v*(Tp-Tref)+L_v)*K_v)*fieldpc.snGrad();
-    // moisture flux term with temperature gradient:               
-    scalarField Xmoist = K_pt*fieldTs.snGrad();
-    //////////////////////////////////      
+    valueFraction() = 0.0;
 
-    scalarField CR(Tp.size(), 0.0);    
-    scalar gl_ = gl(time.value());
     if(gl_ > 0)
-    {
-        //scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
+    {     
         scalarField g_cond = (Krel+K_v)*(-10.0-fieldpc.patchInternalField())*patch().deltaCoeffs();       
-        forAll(CR,faceI)
-        {
-            scalar rainFlux = 0;
-            //if(pc[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
-            if( (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI]) )
+        forAll(valueFraction(),faceI)
+        {  
+            //if(pcp[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
+            if( (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
             {
-                rainFlux = g_cond[faceI] - g_conv[faceI] - phiG[faceI] + Xmoist[faceI];
+                valueFraction()[faceI] = 1.0;
             }
-            else
-            {
-                rainFlux = gl_;
-            }
-            CR[faceI] = rainFlux * cap_l*(rainTemp(time.value()) - Tref);
         }
-    }    
+    }
 
-    if(fieldpc.type() == "HAMexternalImpermeable")
-    {
-        valueFraction() = 0;
-        refValue() = 0;
-        refGrad() = (q_conv + rad(time.value()))/(lambda_m);
-    }
-    else
-    {    
-        refGrad() = (q_conv + LE + rad(time.value()) + CR + phiGT - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
-        refValue() =  0;
-        valueFraction() = 0.0;
-    }
+    refGrad() = (0 + 0 + phiG - X)/(Krel+K_v);
+//    refValue() =  -100.0 + 1.0;
+    refValue() =  -10.0;
 
     mixedFvPatchScalarField::updateCoeffs();
 }
 
 
-void Foam::HAMexternalHeatFluxFvPatchScalarField::write
+void Foam::HAMexternalImpermeableFvPatchScalarField::write
 (
     Ostream& os
 ) const
@@ -260,7 +226,7 @@ namespace Foam
     makePatchTypeField
     (
         fvPatchScalarField,
-        HAMexternalHeatFluxFvPatchScalarField
+        HAMexternalImpermeableFvPatchScalarField
     );
 }
 
