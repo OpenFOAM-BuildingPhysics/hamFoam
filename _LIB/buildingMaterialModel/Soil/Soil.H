@@ -23,31 +23,29 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    Foam::buildingMaterialModels::HamstadConcrete
+    Foam::buildingMaterialModels::Soil
 
 Description
-    buildingMaterial constitutive relationships as given in
-    HAMSTAD Benchmark case 1: insulated roof.
+    buildingMaterial constitutive relationship for soil, consisting of 
+    a balanced proportion of sand, silt and clay based on 
+    Janssen et al. 2002 and Schaap et al. 1998.
    
     References:
-    Hagentoft,  C-E.  (2002).  HAMSTAD  –  Final  report:  Methodology  
-    of  HAM-modeling, Report  R-02:8. Gothenburg, Department of Building 
-    Physics, Chalmers University of Technology.
-
-    Hagentoft, C-E.; Kalagasidis, A.; Adl-Zarrabi, B.; Roels, S.; Carmeliet, J.; 
-    Hens, H; Grunewald, J.; Funk, M.;  Becker,  R.; Shamir,  D.;  Adan,  O.;  
-    Brocken,  H.; Kumaran,  K.;  Djebbar,  R.  (2004). Assessment  Method of 
-    Numerical Prediction Models for Combined Heat, Air and Moisture Transfer 
-    in Building Components:  Benchmarks  for  One-dimensional  Cases.  
-    Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
+    Janssen H, Carmeliet J, Hens H. 2002. The influence of soil moisture in the un-
+    saturated zone on the heat loss from buildings via the ground. 
+    Journal of Building Physics, 25, 275–298.
+    
+    Schaap MG, Leij FJ, Van Genuchten MT. 1998. Neural network analysis for
+    hierarchical prediction of soil hydraulic properties. Soil Science Society 
+    of America Journal Soil Science Society of America, 62, 847–855.
 
 SourceFiles
-    HamstadConcrete.C
+    Soil.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef HamstadConcrete_H
-#define HamstadConcrete_H
+#ifndef Soil_H
+#define Soil_H
 
 #include "buildingMaterialModel.H"
 #include "volFields.H"
@@ -60,10 +58,10 @@ namespace buildingMaterialModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class HamstadConcrete Declaration
+                           Class Soil Declaration
 \*---------------------------------------------------------------------------*/
 
-class HamstadConcrete
+class Soil
 :
     public buildingMaterialModel
 {
@@ -74,13 +72,13 @@ class HamstadConcrete
 public:
 
     //- Runtime type information
-    TypeName("HamstadConcrete");
+    TypeName("Soil");
 
 
     // Constructors
 
         //- Construct from components
-        HamstadConcrete
+        Soil
         (
             const word& name, 
             const dictionary& buildingMaterialDict,
@@ -90,7 +88,7 @@ public:
 
     // Destructor
 
-        ~HamstadConcrete()
+        ~Soil()
         {}
 
 

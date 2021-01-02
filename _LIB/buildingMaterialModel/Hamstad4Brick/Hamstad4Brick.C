@@ -24,7 +24,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "HamstadPlaster.H"
+#include "Hamstad4Brick.H"
 #include "addToRunTimeSelectionTable.H"
 #include "surfaceFields.H"
 
@@ -34,12 +34,12 @@ namespace Foam
 {
 namespace buildingMaterialModels
 {
-    defineTypeNameAndDebug(HamstadPlaster, 0);
+    defineTypeNameAndDebug(Hamstad4Brick, 0);
 
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-        HamstadPlaster,
+        Hamstad4Brick,
         dictionary
     );
 }
@@ -51,7 +51,7 @@ namespace buildingMaterialModels
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::buildingMaterialModels::HamstadPlaster::HamstadPlaster
+Foam::buildingMaterialModels::Hamstad4Brick::Hamstad4Brick
 (
     const word& name,
     const dictionary& buildingMaterialDict,
@@ -67,35 +67,46 @@ Foam::buildingMaterialModels::HamstadPlaster::HamstadPlaster
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
 //- Correct the buildingMaterial moisture content (cell)
-void Foam::buildingMaterialModels::HamstadPlaster::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
+void Foam::buildingMaterialModels::Hamstad4Brick::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
-    List<scalar> reta; reta.setSize(1); reta[0]=-2e-6;
-    List<scalar> retn; retn.setSize(1); retn[0]=1.27e0;
-    List<scalar> retm; retm.setSize(1); retm[0]=0.21260e0;
-    List<scalar> retw; retw.setSize(1); retw[0]=1e0;
+    List<scalar> reta; reta.setSize(2); reta[0]=-1.25e-5; reta[1]=-1.80e-5;
+    List<scalar> retn; retn.setSize(2); retn[0]=1.65e0; retn[1]=6.00e0;
+    List<scalar> retm; retm.setSize(2); retm[0]=0.39394e0; retm[1]=0.83333e0;
+    List<scalar> retw; retw.setSize(2); retw[0]=0.300e0; retw[1]=0.700e0;
     scalar w_tmp = 0; scalar tmp = 0; scalar C_tmp = 0; scalar tmp2 = 0;    
-    for (int i=0; i<=0; i++)
+    for (int i=0; i<=1; i++)
     {
         tmp = pow( (reta[i]*pc.internalField()[celli]) , retn[i] );
         w_tmp = w_tmp + retw[i] / ( pow( (1 + tmp) , retm[i] ));
         tmp2 = pow( (1 + tmp) , retm[i] );
-        C_tmp = C_tmp - retw[i]/tmp2 * retm[i]*retn[i]*tmp/((1 + tmp)*pc.internalField()[celli]); 
-    } 
-    w.ref()[celli] = w_tmp*209;   
-    Crel.ref()[celli] = mag( C_tmp*209 );   
+        C_tmp = C_tmp - retw[i]/tmp2 * retm[i]*retn[i]*tmp/((1 + tmp)*pc.internalField()[celli]);   
+    }
+    w.ref()[celli] = w_tmp*157;
+    Crel.ref()[celli] = mag( C_tmp*157 );   
 }
 
 //- Correct the buildingMaterial liquid permeability (cell)
-void Foam::buildingMaterialModels::HamstadPlaster::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
+void Foam::buildingMaterialModels::Hamstad4Brick::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 {
-    scalar tmp=w.internalField()[celli]-120;
-    tmp=-33.0 +0.0704*tmp -1.742e-4*pow(tmp,2) -2.7953e-6*pow(tmp,3) -1.1566e-7*pow(tmp,4) +2.5969e-9*pow(tmp,5);
-    Krel.ref()[celli] = exp(tmp);
-
+    scalar Ks=1.907E-9; scalar tau=-1.631;
+    List<scalar> reta; reta.setSize(3); reta[0]=2.96E-5; reta[1]=4.17E-7; reta[2]=1.09E-6;
+    List<scalar> retn; retn.setSize(3); retn[0]=6.62; retn[1]=1.17; retn[2]=2.04;
+    List<scalar> retm; retm.setSize(3); retm[0]=0.84894; retm[1]=0.14530; retm[2]=0.50980;
+    List<scalar> retw; retw.setSize(3); retw[0]=0.891; retw[1]=0.500E-3; retw[2]=0.1085;
+    scalar dum1=0; scalar dum2=0; scalar dum3=0; scalar dum4=0;  
+    for (int i=0; i<=2; i++)
+    {
+        dum1=pow( (-reta[i]*pc.internalField()[celli]) , retn[i]);
+        dum2=dum2 + retw[i]*(pow( 1+dum1 , -retm[i]));
+        dum3=dum3 + retw[i]*reta[i]*(1-pow( (dum1/(1+dum1)) , retm[i]));
+        dum4=dum4 + retw[i]*reta[i];
+    }    
+    
+    Krel.ref()[celli] = Ks*(pow( dum2 , tau))*(pow( (dum3/dum4) , 2));
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
-void Foam::buildingMaterialModels::HamstadPlaster::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
+void Foam::buildingMaterialModels::Hamstad4Brick::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
     scalar rho_l = 1.0e3; 
     scalar R_v = 8.31451*1000/(18.01534); 
@@ -104,8 +115,8 @@ void Foam::buildingMaterialModels::HamstadPlaster::update_Kvap_cell(const volSca
     scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
     scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
     
-    scalar tmp = 1 - (w.internalField()[celli]/2.09e2); 
-    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*3*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient "for brick" [s]
+    scalar tmp = 1 - (w.internalField()[celli]/1.57e2); 
+    scalar delta = 2.61e-5 * tmp/(R_v*T.internalField()[celli]*30*(0.503*tmp*tmp + 0.497)); // Water vapour diffusion coefficient "for brick" [s]
     
     K_v.ref()[celli] = (delta*p_vsat*relhum)/(rho_l*R_v*T.internalField()[celli]);
     K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);

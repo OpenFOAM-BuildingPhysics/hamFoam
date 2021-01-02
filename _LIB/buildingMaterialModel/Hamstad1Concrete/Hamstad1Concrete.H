@@ -23,11 +23,11 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    Foam::buildingMaterialModels::HamstadBrick
+    Foam::buildingMaterialModels::Hamstad1Concrete
 
 Description
     buildingMaterial constitutive relationships as given in
-    HAMSTAD Benchmark case 4: response analysis.
+    HAMSTAD Benchmark case 1: insulated roof.
    
     References:
     Hagentoft,  C-E.  (2002).  HAMSTAD  –  Final  report:  Methodology  
@@ -42,12 +42,12 @@ Description
     Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
 
 SourceFiles
-    HamstadBrick.C
+    Hamstad1Concrete.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef HamstadBrick_H
-#define HamstadBrick_H
+#ifndef Hamstad1Concrete_H
+#define Hamstad1Concrete_H
 
 #include "buildingMaterialModel.H"
 #include "volFields.H"
@@ -60,10 +60,10 @@ namespace buildingMaterialModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class HamstadBrick Declaration
+                           Class Hamstad1Concrete Declaration
 \*---------------------------------------------------------------------------*/
 
-class HamstadBrick
+class Hamstad1Concrete
 :
     public buildingMaterialModel
 {
@@ -74,13 +74,13 @@ class HamstadBrick
 public:
 
     //- Runtime type information
-    TypeName("HamstadBrick");
+    TypeName("Hamstad1Concrete");
 
 
     // Constructors
 
         //- Construct from components
-        HamstadBrick
+        Hamstad1Concrete
         (
             const word& name, 
             const dictionary& buildingMaterialDict,
@@ -90,7 +90,7 @@ public:
 
     // Destructor
 
-        ~HamstadBrick()
+        ~Hamstad1Concrete()
         {}
 
 

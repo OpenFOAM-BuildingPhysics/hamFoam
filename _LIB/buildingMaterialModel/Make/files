@@ -1,13 +1,15 @@
 buildingMaterialModel/buildingMaterialModel.C
 buildingMaterialModel/newbuildingMaterialModel.C
-HamstadBrick/HamstadBrick.C
-HamstadPlaster/HamstadPlaster.C
+
+Hamstad1Concrete/Hamstad1Concrete.C
+Hamstad1Insulation/Hamstad1Insulation.C
+Hamstad3Wall/Hamstad3Wall.C
+Hamstad4Brick/Hamstad4Brick.C
+Hamstad4Plaster/Hamstad4Plaster.C
 Hamstad5Brick/Hamstad5Brick.C
 Hamstad5Insulation/Hamstad5Insulation.C
 Hamstad5Mortar/Hamstad5Mortar.C
-HamstadConcrete/HamstadConcrete.C
-Hamstad1Insulation/Hamstad1Insulation.C
-Hamstad3Wall/Hamstad3Wall.C
+
 AcrylicPaint/AcrylicPaint.C
 BuildingPaper/BuildingPaper.C
 GlassFiberInsulation/GlassFiberInsulation.C
@@ -19,5 +21,7 @@ VWC/VWC.C
 
 VanGenuchten/VanGenuchten.C
 VanGenuchtenVapDiff/VanGenuchtenVapDiff.C
+
+Soil/Soil.C
 
 LIB = $(FOAM_USER_LIBBIN)/libHAMbuildingMaterialModel

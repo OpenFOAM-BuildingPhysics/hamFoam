@@ -23,7 +23,7 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    Foam::buildingMaterialModels::HamstadPlaster
+    Foam::buildingMaterialModels::Hamstad4Brick
 
 Description
     buildingMaterial constitutive relationships as given in
@@ -42,12 +42,12 @@ Description
     Journal  of  Building Physics. Vol. 27 (4), pp. 327-352
 
 SourceFiles
-    HamstadPlaster.C
+    Hamstad4Brick.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef HamstadPlaster_H
-#define HamstadPlaster_H
+#ifndef Hamstad4Brick_H
+#define Hamstad4Brick_H
 
 #include "buildingMaterialModel.H"
 #include "volFields.H"
@@ -60,10 +60,10 @@ namespace buildingMaterialModels
 {
 
 /*---------------------------------------------------------------------------*\
-                           Class HamstadPlaster Declaration
+                           Class Hamstad4Brick Declaration
 \*---------------------------------------------------------------------------*/
 
-class HamstadPlaster
+class Hamstad4Brick
 :
     public buildingMaterialModel
 {
@@ -74,13 +74,13 @@ class HamstadPlaster
 public:
 
     //- Runtime type information
-    TypeName("HamstadPlaster");
+    TypeName("Hamstad4Brick");
 
 
     // Constructors
 
         //- Construct from components
-        HamstadPlaster
+        Hamstad4Brick
         (
             const word& name, 
             const dictionary& buildingMaterialDict,
@@ -90,7 +90,7 @@ public:
 
     // Destructor
 
-        ~HamstadPlaster()
+        ~Hamstad4Brick()
         {}
 
 
