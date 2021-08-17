@@ -27,7 +27,7 @@ Class
 
 Description
 	buildingMaterial constitutive relationships as given in
-	Heat-Moisture Transport Simulations according to Cameliet
+	Heat-Moisture Transport Simulations according to Carmeliet
 	and Derome's research.
 
     Reference:

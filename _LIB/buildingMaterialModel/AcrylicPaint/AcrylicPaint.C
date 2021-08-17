@@ -70,7 +70,7 @@ Foam::buildingMaterialModels::AcrylicPaint::AcrylicPaint
 void Foam::buildingMaterialModels::AcrylicPaint::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
     w.ref()[celli] = 0;   
-    Crel.ref()[celli] = 0;   
+    Crel.ref()[celli] = SMALL;   
 }
 
 //- Correct the buildingMaterial liquid permeability (cell)

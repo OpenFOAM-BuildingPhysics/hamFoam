@@ -96,7 +96,7 @@ void Foam::buildingMaterialModels::Masonry::update_w_C_cell(const volScalarField
 	}
 	
 	scalar f_brick = 0.79;
-	scalar f_mortar = 0.21;
+	scalar f_mortar = 0.20;
 	scalar f_crack = 0.01;
 	
 	w.ref()[celli] = ( (w_tmp_mortar * 97 * f_mortar) + (w_tmp_brick * 220 * f_brick) ) * (1-f_crack);
@@ -132,12 +132,12 @@ void Foam::buildingMaterialModels::Masonry::update_Krel_cell(const volScalarFiel
 	}
 	else if (logpc >= logpc_M.last())
 	{
-		i = logpc_M.size()-1;
+		i = logpc_M.size()-2;
 		logKl = logKl_M[i] + (((logKl_M[i + 1] - logKl_M[i]) / (logpc_M[i + 1] - logpc_M[i]))*(logpc - logpc_M[i]));
 	}
 	else
 	{
-		for (i = 0; i <= logpc_M.size()-1; ++i)
+		for (i = 0; i < logpc_M.size()-1; ++i)
 		{
 			if ((logpc_M[i] <= logpc) && (logpc < logpc_M[i + 1]))
 			{
@@ -161,13 +161,13 @@ void Foam::buildingMaterialModels::Masonry::update_Kvap_cell(const volScalarFiel
 	scalar c = 0.503;
 	scalar d = 0.497;
 	
-	scalar delta_a = 1.87e-10;
+	scalar delta_a = 1.91e-10;
 
 	scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3 / T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
 	scalar relhum = Foam::exp(pc.internalField()[celli] / (rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
 
 	scalar f_brick = 0.79;
-	scalar f_mortar = 0.21;
+	scalar f_mortar = 0.20;
 	scalar f_crack = 0.01;
 	
 	scalar wsat = ( (97 * f_mortar) + (220 * f_brick) ) * (1-f_crack);

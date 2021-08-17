@@ -82,7 +82,6 @@ void Foam::buildingMaterialModels::VWC::update_Krel_cell(const volScalarField& p
 //- Correct the buildingMaterial vapor permeability (cell)
 void Foam::buildingMaterialModels::VWC::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
-//	K_v.ref()[celli] = 2.5e-14;
 	scalar rho_l = 1.0e3;
 	scalar R_v = 8.31451 * 1000 / (18.01534);
 	scalar L_v = 2.5e6;

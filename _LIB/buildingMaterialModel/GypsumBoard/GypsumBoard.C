@@ -110,12 +110,12 @@ void Foam::buildingMaterialModels::GypsumBoard::update_Krel_cell(const volScalar
 	}
 	else if (logpc >= logpc_M.last())
 	{
-		i = logpc_M.size()-1;
+		i = logpc_M.size()-2;
 		logKl = logKl_M[i] + (((logKl_M[i + 1] - logKl_M[i]) / (logpc_M[i + 1] - logpc_M[i]))*(logpc - logpc_M[i]));
 	}
 	else
 	{
-		for (i = 0; i <= logpc_M.size()-1; ++i)
+		for (i = 0; i < logpc_M.size()-1; ++i)
 		{
 			if ((logpc_M[i] <= logpc) && (logpc < logpc_M[i + 1]))
 			{
