@@ -4,8 +4,10 @@ An open-source solver for coupled heat and moisture transport in porous media ba
 
 hamFoam is mainly intended for the absorption, transport and storage simulations of coupled heat and moisture within porous building materials.
 
-<img src="https://carmeliet.ethz.ch/research/downloads/coupled-heat-and-moisture-transport-solver-for-openfoam/_jcr_content/par/fullwidthimage/image.imageformat.fullwidth.1496181206.png"  width="60%">
+<img src="https://carmeliet.ethz.ch/research/downloads/coupled-heat-and-moisture-transport-solver-for-openfoam/_jcr_content/par/fullwidthimage/image.imageformat.fullwidth.1496181206.png"  width="400">
 
 The solver is tested for OpenFOAM v6.
+
+Read [hamFoam wiki](https://gitlab.ethz.ch/openfoam-cbp/solvers/hamfoam/-/wikis/home) for documentation.
 
 More information: https://carmeliet.ethz.ch/research/downloads
