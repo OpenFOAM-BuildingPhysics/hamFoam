@@ -1,13 +1,13 @@
-pc=pc_old;//pc.prevIter(); 
+pc=pc_old;
 volScalarField::Boundary& pcBf = pc.boundaryFieldRef();
 forAll(pcBf, patchi)
-{ 
+{
     forAll(pcBf[patchi], facei)
     {
         pcBf[patchi][facei] = pc_old.boundaryField()[patchi][facei];
     }
 }
-Ts=Ts_old;//.prevIter();
+Ts=Ts_old;
 volScalarField::Boundary& TsBf = Ts.boundaryFieldRef();
 forAll(TsBf, patchi)
 { 
@@ -16,3 +16,5 @@ forAll(TsBf, patchi)
         TsBf[patchi][facei] = Ts_old.boundaryField()[patchi][facei];
     }
 }
+pc.correctBoundaryConditions();
+Ts.correctBoundaryConditions();

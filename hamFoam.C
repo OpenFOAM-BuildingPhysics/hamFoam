@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
         #include "updatebuildingMaterials.H"
         
-        //store values from previous timestep (for mixed form moisture equation)
+        //store values from previous timestep
         volScalarField ws_old = ws; //ws_old.boundaryField().updateCoeffs();
         volScalarField pc_old = pc; //pc_old.boundaryField().updateCoeffs();
         volScalarField Ts_old = Ts; //Ts_old.boundaryField().updateCoeffs();
@@ -80,83 +80,42 @@ int main(int argc, char *argv[])
 
         for (int nIterPicard=1; nIterPicard<=nIterPicardMax; nIterPicard++)
         {   
-
             //Moisture transfer////////////
-                #include "pcEqn.H"    
+            #include "pcEqn.H"    
 
-                //Firstly, test if all pc values are valid
-                if (gMax(pc) >= 0 || gMax(pc.boundaryField()) >= 0)
-                {
-                    Info << "This is going to crash (pc)! Decreasing timestep and reverting fields..." << endl;
-                    Info << "Error: gMax(pc): " << gMax(pc) << ", gMax(pc.boundaryField()): " << gMax(pc.boundaryField()) << endl;
-                    timeStepDecrease = true;
-                    #include "setDeltaT.H"
-                    #include "revertValues.H"    
-                    break;
-                }
-                pc.correctBoundaryConditions();
+            //Firstly, test if all pc values are valid
+            if (gMax(pc) >= 0 || gMax(pc.boundaryField()) >= 0)
+            {
+                Info << "This is going to crash (pc)! Decreasing timestep and reverting fields..." << endl;
+                Info << "Error: gMax(pc): " << gMax(pc) << ", gMax(pc.boundaryField()): " << gMax(pc.boundaryField()) << endl;
+                timeStepDecrease = true;
+                #include "setDeltaT.H"
+                #include "revertValues.H"
+                break;
+            }
+            pc.correctBoundaryConditions();
             ///////////////////////////////
 
             //Heat transfer////////////////
-                #include "TsEqn.H" 
-                //Firstly, test if all Ts values are valid
-                if (gMin(Ts) <= 0 || gMin(Ts.boundaryField()) <= 0)
-                {           
-                    Info << "This is going to crash (Ts)! Decreasing timestep and reverting fields..." << endl;
-                    timeStepDecrease = true;
-                    #include "setDeltaT.H"
-                    #include "revertValues.H"  
-                    break;                      
-                }
-                Ts.correctBoundaryConditions();
+            #include "TsEqn.H" 
+            //Firstly, test if all Ts values are valid
+            if (gMin(Ts) <= 0 || gMin(Ts.boundaryField()) <= 0)
+            {           
+                Info << "This is going to crash (Ts)! Decreasing timestep and reverting fields..." << endl;
+                timeStepDecrease = true;
+                #include "setDeltaT.H"
+                #include "revertValues.H"  
+                break;                      
+            }
+            Ts.correctBoundaryConditions();
             ///////////////////////////////
+
+            //Convergence test/////////////      
+            #include "updatebuildingMaterials.H" //update values for convergence test
             
-
-            //Convergence test/////////////
-
-                //update values for convergence test
-                #include "updatebuildingMaterials.H" 
-            
-                //convergence test
-
-                scalar maxChangews = gMax(mag(ws.primitiveField()-ws_n.primitiveField())); 
-                scalar maxChangeTs = gMax(mag(Ts.primitiveField()-Ts_n.primitiveField())); 
-                if(maxChangews < PicardTolerancews && maxChangeTs < PicardToleranceTs && nIterPicard>=2) //force at least 1 picard iteration
-                {
-                    pc_n = pc; //pc_n.boundaryFieldRef().updateCoeffs();
-                    ws_n = ws; //ws_n.boundaryFieldRef().updateCoeffs();
-                    Ts_n = Ts; //Ts_n.boundaryFieldRef().updateCoeffs();
-                    Info << "Total Picard iterations: " << nIterPicard << endl;
-                    if (debugFluxes)
-                    {
-                        #include "debugFluxes.H"
-                    }
-                    timeStepDecrease = false;
-                    runTime++;
-                    #include "setDeltaT.H"
-                    break;
-                }
-                else if (nIterPicard == nIterPicardMax) //Picard iteration reached maximum
-                {
-                    Info
-                       << "Picard iteration didn't converge !"
-                       << endl
-                       << "maxChangews: " << maxChangews << endl
-                       << "maxChangeT: " << maxChangeTs << endl
-                       << "Total Picard iterations: " << nIterPicard << endl;
-                    timeStepDecrease = true;
-                    #include "setDeltaT.H"                    
-                    #include "revertValues.H"
-                }   
-                else //not converged nor reached the maximum iteration yet, continue
-                {
-                    pc_n = pc; //pc_n.boundaryFieldRef().updateCoeffs();
-                    ws_n = ws; //ws_n.boundaryFieldRef().updateCoeffs();
-                    Ts_n = Ts; //Ts_n.boundaryFieldRef().updateCoeffs();
-                    Info << "maxChangews: " << maxChangews << ", maxChangeTs: " << maxChangeTs << endl;
-                }               
+            #include "checkConvergence.H" 
             ///////////////////////////////
-        }        
+        }       
 
         runTime.write();    
         
