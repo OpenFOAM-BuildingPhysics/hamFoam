@@ -30,8 +30,6 @@ License
 #include "mappedPatchBase.H"
 #include "uniformDimensionedFields.H"
 
-#include "interpolationTable.H"
-
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::HAMexternalHeatFluxFvPatchScalarField::
@@ -41,7 +39,14 @@ HAMexternalHeatFluxFvPatchScalarField
     const DimensionedField<scalar, volMesh>& iF
 )
 :
-    mixedFvPatchScalarField(p, iF)
+    mixedFvPatchScalarField(p, iF),
+    Tambient(),
+    alpha(),
+    rad(),
+    beta(),
+    pv_o(),
+    gl(),
+    rainTemp()
 {
     refValue() = 0.0;
     refGrad() = 0.0;
@@ -70,7 +75,14 @@ HAMexternalHeatFluxFvPatchScalarField
     const dictionary& dict
 )
 :
-    mixedFvPatchScalarField(p, iF)
+    mixedFvPatchScalarField(p, iF),
+    Tambient("$FOAM_CASE/0/" + this->patch().name() + "/Tambient"),
+    alpha("$FOAM_CASE/0/" + this->patch().name() + "/alpha"),
+    rad("$FOAM_CASE/0/" + this->patch().name() + "/rad"),
+    beta("$FOAM_CASE/0/" + this->patch().name() + "/beta"),
+    pv_o("$FOAM_CASE/0/" + this->patch().name() + "/pv_o"),
+    gl("$FOAM_CASE/0/" + this->patch().name() + "/gl"),
+    rainTemp("$FOAM_CASE/0/" + this->patch().name() + "/rainTemp")
 {
     fvPatchScalarField::operator=(scalarField("value", dict, p.size()));
 
@@ -151,37 +163,8 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             );  
             
     const polyPatch& p = this->patch().patch();
-    const word& patchName = this->patch().name();
     const polyMesh& mesh = p.boundaryMesh().mesh();
-    Time& time = const_cast<Time&>(mesh.time());
-    interpolationTable<scalar> Tambient
-    (
-        "$FOAM_CASE/0/" + patchName + "/Tambient"
-    ); 
-    interpolationTable<scalar> alpha
-    (
-        "$FOAM_CASE/0/" + patchName + "/alpha"
-    ); 
-    interpolationTable<scalar> rad
-    (
-        "$FOAM_CASE/0/" + patchName + "/rad"
-    );
-    interpolationTable<scalar> beta
-    (
-        "$FOAM_CASE/0/" + patchName + "/beta"
-    );
-    interpolationTable<scalar> pv_o
-    (
-        "$FOAM_CASE/0/" + patchName + "/pv_o"
-    ); 
-    interpolationTable<scalar> gl
-    (
-        "$FOAM_CASE/0/" + patchName + "/gl"
-    );
-    interpolationTable<scalar> rainTemp
-    (
-        "$FOAM_CASE/0/" + patchName + "/rainTemp"
-    );            
+    Time& time = const_cast<Time&>(mesh.time());         
 
     scalarField q_conv = alpha(time.value())*(Tambient(time.value())-Tp);
 

@@ -30,8 +30,6 @@ License
 #include "mappedPatchBase.H"
 #include "uniformDimensionedFields.H"
 
-#include "interpolationTable.H"
-
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 Foam::HAMexternalImpermeableFvPatchScalarField::
@@ -121,7 +119,7 @@ void Foam::HAMexternalImpermeableFvPatchScalarField::updateCoeffs()
         return;
     }
 
-    scalar rhol=1.0e3; scalar Rv=8.31451*1000/(18.01534);   
+    scalar rhol=1.0e3; //scalar Rv=8.31451*1000/(18.01534);   
 
     scalarField& pcp = *this;
 
@@ -136,42 +134,7 @@ void Foam::HAMexternalImpermeableFvPatchScalarField::updateCoeffs()
             <const fvPatchScalarField>
             (
                 patch().lookupPatchField<volScalarField, scalar>("Ts")
-            );
-            
-    const fvPatchScalarField&
-        fieldpc = refCast
-            <const fvPatchScalarField>
-            (
-                patch().lookupPatchField<volScalarField, scalar>("pc")
-            );            
-
-    const polyPatch& p = this->patch().patch();
-    const word& patchName = this->patch().name();
-    const polyMesh& mesh = p.boundaryMesh().mesh();
-    Time& time = const_cast<Time&>(mesh.time());
-    interpolationTable<scalar> Tambient
-    (
-        "$FOAM_CASE/0/" + patchName + "/Tambient"
-    ); 
-    interpolationTable<scalar> beta
-    (
-        "$FOAM_CASE/0/" + patchName +  "/beta"
-    ); 
-    interpolationTable<scalar> pv_o
-    (
-        "$FOAM_CASE/0/" + patchName +  "/pv_o"
-    ); 
-    interpolationTable<scalar> gl
-    (
-        "$FOAM_CASE/0/" + patchName +  "/gl"
-    ); 
-
-    scalarField pvsat_s = exp(6.58094e1-7.06627e3/Ts-5.976*log(Ts));
-    scalarField pv_s = pvsat_s*exp((pcp)/(rhol*Rv*Ts));
-
-    scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);
-    scalar gl_ = gl(time.value());
-//    scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
+            );          
 
     // term with temperature gradient:
     scalarField K_pt(pcp.size(), 0.0);
@@ -188,19 +151,6 @@ void Foam::HAMexternalImpermeableFvPatchScalarField::updateCoeffs()
     //////////////////////////////////
 
     valueFraction() = 0.0;
-
-    if(gl_ > 0)
-    {     
-        scalarField g_cond = (Krel+K_v)*(-10.0-fieldpc.patchInternalField())*patch().deltaCoeffs();       
-        forAll(valueFraction(),faceI)
-        {  
-            //if(pcp[faceI] > -100.0 && (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
-            if( (gl_ > g_cond[faceI] - g_conv[faceI] - phiG[faceI] + X[faceI]) )    
-            {
-                valueFraction()[faceI] = 1.0;
-            }
-        }
-    }
 
     refGrad() = (0 + 0 + phiG - X)/(Krel+K_v);
 //    refValue() =  -100.0 + 1.0;
