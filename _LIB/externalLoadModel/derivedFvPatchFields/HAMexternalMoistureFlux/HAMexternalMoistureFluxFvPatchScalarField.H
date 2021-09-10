@@ -52,7 +52,7 @@ SourceFiles
 
 #include "mixedFvPatchFields.H"
 
-#include "interpolationTable.H"
+#include "TableFile.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -71,16 +71,16 @@ public:
 
 private:
 
-    // Private data
-
+    // Private data  
+        
         //- table time vs convective moisture transfer coefficient [s/m]
-        interpolationTable<scalar> beta;
+        const autoPtr<Function1s::TableFile<scalar>> beta;
         
         //- table time vs exterior vapor pressure [Pa]
-        interpolationTable<scalar> pv_o;
+        const autoPtr<Function1s::TableFile<scalar>> pv_o;
         
         //- table time vs rain flux [kg/m2s]
-        interpolationTable<scalar> gl; 
+        const autoPtr<Function1s::TableFile<scalar>> gl; 
 
 public:
 

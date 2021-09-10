@@ -76,13 +76,13 @@ HAMexternalHeatFluxFvPatchScalarField
 )
 :
     mixedFvPatchScalarField(p, iF),
-    Tambient("$FOAM_CASE/0/" + this->patch().name() + "/Tambient"),
-    alpha("$FOAM_CASE/0/" + this->patch().name() + "/alpha"),
-    rad("$FOAM_CASE/0/" + this->patch().name() + "/rad"),
-    beta("$FOAM_CASE/0/" + this->patch().name() + "/beta"),
-    pv_o("$FOAM_CASE/0/" + this->patch().name() + "/pv_o"),
-    gl("$FOAM_CASE/0/" + this->patch().name() + "/gl"),
-    rainTemp("$FOAM_CASE/0/" + this->patch().name() + "/rainTemp")
+    Tambient(new Function1s::TableFile<scalar>("Tambient", dict.subDict("TambientCoeffs"))),
+    alpha(new Function1s::TableFile<scalar>("alpha", dict.subDict("alphaCoeffs"))),
+    rad(new Function1s::TableFile<scalar>("rad", dict.subDict("radCoeffs"))),
+    beta(new Function1s::TableFile<scalar>("beta", dict.subDict("betaCoeffs"))),        
+    pv_o(new Function1s::TableFile<scalar>("pv_o", dict.subDict("pv_oCoeffs"))),        
+    gl(new Function1s::TableFile<scalar>("gl", dict.subDict("glCoeffs"))),        
+    rainTemp(new Function1s::TableFile<scalar>("rainTemp", dict.subDict("rainTempCoeffs")))                
 {
     fvPatchScalarField::operator=(scalarField("value", dict, p.size()));
 
@@ -164,14 +164,14 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             
     const polyPatch& p = this->patch().patch();
     const polyMesh& mesh = p.boundaryMesh().mesh();
-    Time& time = const_cast<Time&>(mesh.time());         
+    Time& time = const_cast<Time&>(mesh.time());           
 
-    scalarField q_conv = alpha(time.value())*(Tambient(time.value())-Tp);
+    scalarField q_conv = alpha->value(time.value())*(Tambient->value(time.value())-Tp);
 
     scalarField pvsat_s = exp(6.58094e1-7.06627e3/Tp-5.976*log(Tp));
     scalarField pv_s = pvsat_s*exp((pc)/(rhol*Rv*Tp));
 
-    scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);    
+    scalarField g_conv = beta->value(time.value())*(pv_o->value(time.value())-pv_s);    
     scalarField LE = (cap_v*(Tp-Tref)+L_v)*g_conv;//Latent and sensible heat transfer due to vapor exchange    
     
     //-- Gravity-enthalpy flux --//
@@ -189,7 +189,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     //////////////////////////////////      
 
     scalarField CR(Tp.size(), 0.0);    
-    scalar gl_ = gl(time.value());
+    scalar gl_ = gl->value(time.value());
     if(gl_ > 0)
     {
         //scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
@@ -206,7 +206,7 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             {
                 rainFlux = gl_;
             }
-            CR[faceI] = rainFlux * cap_l*(rainTemp(time.value()) - Tref);
+            CR[faceI] = rainFlux * cap_l*(rainTemp->value(time.value()) - Tref);
         }
     }    
 
@@ -214,11 +214,11 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
     {
         valueFraction() = 0;
         refValue() = 0;
-        refGrad() = (q_conv + rad(time.value()))/(lambda_m);
+        refGrad() = (q_conv + rad->value(time.value()))/(lambda_m);
     }
     else
     {    
-        refGrad() = (q_conv + LE + rad(time.value()) + CR + phiGT - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
+        refGrad() = (q_conv + LE + rad->value(time.value()) + CR + phiGT - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
         refValue() =  0;
         valueFraction() = 0.0;
     }
@@ -233,6 +233,13 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::write
 ) const
 {
     mixedFvPatchScalarField::write(os);
+    writeEntry(os, Tambient());
+    writeEntry(os, alpha());
+    writeEntry(os, rad());    
+    writeEntry(os, beta());
+    writeEntry(os, pv_o());
+    writeEntry(os, gl());
+    writeEntry(os, rainTemp());
 }
 
 

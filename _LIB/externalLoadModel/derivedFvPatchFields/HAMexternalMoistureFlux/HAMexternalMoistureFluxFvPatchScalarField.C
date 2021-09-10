@@ -72,9 +72,9 @@ HAMexternalMoistureFluxFvPatchScalarField
 )
 :
     mixedFvPatchScalarField(p, iF),
-    beta("$FOAM_CASE/0/" + this->patch().name() + "/beta"),        
-    pv_o("$FOAM_CASE/0/" + this->patch().name() + "/pv_o"),        
-    gl("$FOAM_CASE/0/" + this->patch().name() + "/gl")  
+    beta(new Function1s::TableFile<scalar>("beta", dict.subDict("betaCoeffs"))),        
+    pv_o(new Function1s::TableFile<scalar>("pv_o", dict.subDict("pv_oCoeffs"))),        
+    gl(new Function1s::TableFile<scalar>("gl", dict.subDict("glCoeffs")))                    
 {
     fvPatchScalarField::operator=(scalarField("value", dict, p.size()));
 
@@ -156,8 +156,8 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::updateCoeffs()
     scalarField pvsat_s = exp(6.58094e1-7.06627e3/Ts-5.976*log(Ts));
     scalarField pv_s = pvsat_s*exp((pcp)/(rhol*Rv*Ts));
 
-    scalarField g_conv = beta(time.value())*(pv_o(time.value())-pv_s);
-    scalar gl_ = gl(time.value());
+    scalarField g_conv = beta->value(time.value())*(pv_o->value(time.value())-pv_s);
+    scalar gl_ = gl->value(time.value());
 //    scalarField g_cond = (Krel+K_v)*fieldpc.snGrad();
 
     // term with temperature gradient:
@@ -203,6 +203,9 @@ void Foam::HAMexternalMoistureFluxFvPatchScalarField::write
 ) const
 {
     mixedFvPatchScalarField::write(os);
+    writeEntry(os, beta());
+    writeEntry(os, pv_o());
+    writeEntry(os, gl());
 }
 
 

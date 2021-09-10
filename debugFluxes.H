@@ -22,26 +22,36 @@ forAll(patchSet, i)
     scalarField K_vPatch(patch.size(), 0.0);
         K_vPatch = patch.lookupPatchField<volScalarField, scalar>("K_v");                 
 
-    interpolationTable<scalar> gl
-    (
-        "$FOAM_CASE/0/" + patch.name() +  "/gl"
-    ); 
-    interpolationTable<scalar> beta
-    (
-        "$FOAM_CASE/0/" + patch.name() +  "/beta"
-    ); 
-    interpolationTable<scalar> pv_o
-    (
-        "$FOAM_CASE/0/" + patch.name() +  "/pv_o"
-    ); 
+    dictionary betaDict;
+    betaDict.add("file", "$FOAM_CASE/0/" + patch.name() +  "/beta");
+    dictionary pv_oDict;
+    pv_oDict.add("file", "$FOAM_CASE/0/" + patch.name() +  "/pv_o");
+    dictionary glDict;
+    glDict.add("file", "$FOAM_CASE/0/" + patch.name() +  "/gl");        
 
+    Function1s::TableFile<scalar> beta
+    (
+        "beta",
+        betaDict
+    ); 
+    Function1s::TableFile<scalar> pv_o
+    (
+        "pv_o",
+        pv_oDict
+    ); 
+    Function1s::TableFile<scalar> gl
+    (
+        "gl",
+        glDict
+    ); 
+    
     scalar currentTime = runTime.value();
     scalar currentTimeStep = runTime.deltaT().value();
     
     scalarField pvsat_s = exp(6.58094e1-7.06627e3/TsPatch-5.976*log(TsPatch));
     scalar rhol=1.0e3; scalar Rv=8.31451*1000/(18.01534);
     scalarField pv_s = pvsat_s*exp((pcPatch)/(rhol*Rv*TsPatch));
-    scalarField evap = beta(currentTime)*(pv_s-pv_o(currentTime));
+    scalarField evap = beta.value(currentTime)*(pv_s-pv_o.value(currentTime));
 
     const scalarField& V = mesh.V();
 
@@ -49,7 +59,7 @@ forAll(patchSet, i)
 
     if(gMax(pcFvPatch.valueFraction())>0)
     {
-        scalar gl_ = gl(currentTime);
+        scalar gl_ = gl.value(currentTime);
         scalarField runoff = (gl_ - (KrelPatch+K_vPatch)*pcFvPatch.snGrad()) * pcFvPatch.valueFraction();
         A = ( gSum(runoff*patch.magSf())/gSum(patch.magSf()) )*currentTimeStep;
     }
