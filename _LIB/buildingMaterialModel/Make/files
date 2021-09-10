@@ -1,27 +1,27 @@
-buildingMaterialModel/buildingMaterialModel.C
-buildingMaterialModel/newbuildingMaterialModel.C
+SOURCE += buildingMaterialModel/buildingMaterialModel.C
+SOURCE += buildingMaterialModel/newbuildingMaterialModel.C
 
-Hamstad1Concrete/Hamstad1Concrete.C
-Hamstad1Insulation/Hamstad1Insulation.C
-Hamstad3Wall/Hamstad3Wall.C
-Hamstad4Brick/Hamstad4Brick.C
-Hamstad4Plaster/Hamstad4Plaster.C
-Hamstad5Brick/Hamstad5Brick.C
-Hamstad5Insulation/Hamstad5Insulation.C
-Hamstad5Mortar/Hamstad5Mortar.C
+SOURCE += Hamstad1Concrete/Hamstad1Concrete.C
+SOURCE += Hamstad1Insulation/Hamstad1Insulation.C
+SOURCE += Hamstad3Wall/Hamstad3Wall.C
+SOURCE += Hamstad4Brick/Hamstad4Brick.C
+SOURCE += Hamstad4Plaster/Hamstad4Plaster.C
+SOURCE += Hamstad5Brick/Hamstad5Brick.C
+SOURCE += Hamstad5Insulation/Hamstad5Insulation.C
+SOURCE += Hamstad5Mortar/Hamstad5Mortar.C
 
-AcrylicPaint/AcrylicPaint.C
-BuildingPaper/BuildingPaper.C
-GlassFiberInsulation/GlassFiberInsulation.C
-GypsumBoard/GypsumBoard.C
-Masonry/Masonry.C
-OSB/OSB.C
-SBPO/SBPO.C
-VWC/VWC.C
+SOURCE += AcrylicPaint/AcrylicPaint.C
+SOURCE += BuildingPaper/BuildingPaper.C
+SOURCE += GlassFiberInsulation/GlassFiberInsulation.C
+SOURCE += GypsumBoard/GypsumBoard.C
+SOURCE += Masonry/Masonry.C
+SOURCE += OSB/OSB.C
+SOURCE += SBPO/SBPO.C
+SOURCE += VWC/VWC.C
 
-VanGenuchten/VanGenuchten.C
-VanGenuchtenVapDiff/VanGenuchtenVapDiff.C
+SOURCE += VanGenuchten/VanGenuchten.C
+SOURCE += VanGenuchtenVapDiff/VanGenuchtenVapDiff.C
 
-Soil/Soil.C
+SOURCE += Soil/Soil.C
 
 LIB = $(FOAM_USER_LIBBIN)/libHAMbuildingMaterialModel

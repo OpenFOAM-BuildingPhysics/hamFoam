@@ -76,13 +76,13 @@ HAMexternalHeatFluxFvPatchScalarField
 )
 :
     mixedFvPatchScalarField(p, iF),
-    Tambient(new Function1s::TableFile<scalar>("Tambient", dict.subDict("TambientCoeffs"))),
-    alpha(new Function1s::TableFile<scalar>("alpha", dict.subDict("alphaCoeffs"))),
-    rad(new Function1s::TableFile<scalar>("rad", dict.subDict("radCoeffs"))),
-    beta(new Function1s::TableFile<scalar>("beta", dict.subDict("betaCoeffs"))),        
-    pv_o(new Function1s::TableFile<scalar>("pv_o", dict.subDict("pv_oCoeffs"))),        
-    gl(new Function1s::TableFile<scalar>("gl", dict.subDict("glCoeffs"))),        
-    rainTemp(new Function1s::TableFile<scalar>("rainTemp", dict.subDict("rainTempCoeffs")))                
+    Tambient(new Function1s::Table<scalar>("Tambient", dict.subDict("Tambient"))),
+    alpha(new Function1s::Table<scalar>("alpha", dict.subDict("alpha"))),
+    rad(new Function1s::Table<scalar>("rad", dict.subDict("rad"))),
+    beta(new Function1s::Table<scalar>("beta", dict.subDict("beta"))),        
+    pv_o(new Function1s::Table<scalar>("pv_o", dict.subDict("pv_o"))),        
+    gl(new Function1s::Table<scalar>("gl", dict.subDict("gl"))),        
+    rainTemp(new Function1s::Table<scalar>("rainTemp", dict.subDict("rainTemp")))                
 {
     fvPatchScalarField::operator=(scalarField("value", dict, p.size()));
 
@@ -101,16 +101,6 @@ HAMexternalHeatFluxFvPatchScalarField
         valueFraction() = 1.0;
     }
 }
-
-
-Foam::HAMexternalHeatFluxFvPatchScalarField::
-HAMexternalHeatFluxFvPatchScalarField
-(
-    const HAMexternalHeatFluxFvPatchScalarField& tppsf
-)
-:
-    mixedFvPatchScalarField(tppsf)
-{}
 
 
 Foam::HAMexternalHeatFluxFvPatchScalarField::

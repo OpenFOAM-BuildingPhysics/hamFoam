@@ -92,16 +92,6 @@ HAMexternalImpermeableFvPatchScalarField
 Foam::HAMexternalImpermeableFvPatchScalarField::
 HAMexternalImpermeableFvPatchScalarField
 (
-    const HAMexternalImpermeableFvPatchScalarField& tppsf
-)
-:
-    mixedFvPatchScalarField(tppsf)
-{}
-
-
-Foam::HAMexternalImpermeableFvPatchScalarField::
-HAMexternalImpermeableFvPatchScalarField
-(
     const HAMexternalImpermeableFvPatchScalarField& tppsf,
     const DimensionedField<scalar, volMesh>& iF
 )

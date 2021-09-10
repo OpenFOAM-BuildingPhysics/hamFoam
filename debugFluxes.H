@@ -29,17 +29,17 @@ forAll(patchSet, i)
     dictionary glDict;
     glDict.add("file", "$FOAM_CASE/0/" + patch.name() +  "/gl");        
 
-    Function1s::TableFile<scalar> beta
+    Function1s::Table<scalar> beta
     (
         "beta",
         betaDict
     ); 
-    Function1s::TableFile<scalar> pv_o
+    Function1s::Table<scalar> pv_o
     (
         "pv_o",
         pv_oDict
     ); 
-    Function1s::TableFile<scalar> gl
+    Function1s::Table<scalar> gl
     (
         "gl",
         glDict

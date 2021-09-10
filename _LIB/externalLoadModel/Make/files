@@ -1,5 +1,5 @@
-derivedFvPatchFields/HAMexternalHeatFlux/HAMexternalHeatFluxFvPatchScalarField.C
-derivedFvPatchFields/HAMexternalMoistureFlux/HAMexternalMoistureFluxFvPatchScalarField.C
-derivedFvPatchFields/HAMexternalImpermeable/HAMexternalImpermeableFvPatchScalarField.C
+SOURCE += derivedFvPatchFields/HAMexternalHeatFlux/HAMexternalHeatFluxFvPatchScalarField.C
+SOURCE += derivedFvPatchFields/HAMexternalMoistureFlux/HAMexternalMoistureFluxFvPatchScalarField.C
+SOURCE += derivedFvPatchFields/HAMexternalImpermeable/HAMexternalImpermeableFvPatchScalarField.C
 
 LIB = $(FOAM_USER_LIBBIN)/libHAMexternalLoad

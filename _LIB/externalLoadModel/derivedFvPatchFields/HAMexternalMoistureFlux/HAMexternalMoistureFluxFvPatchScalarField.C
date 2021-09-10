@@ -72,9 +72,9 @@ HAMexternalMoistureFluxFvPatchScalarField
 )
 :
     mixedFvPatchScalarField(p, iF),
-    beta(new Function1s::TableFile<scalar>("beta", dict.subDict("betaCoeffs"))),        
-    pv_o(new Function1s::TableFile<scalar>("pv_o", dict.subDict("pv_oCoeffs"))),        
-    gl(new Function1s::TableFile<scalar>("gl", dict.subDict("glCoeffs")))                    
+    beta(new Function1s::Table<scalar>("beta", dict.subDict("beta"))),        
+    pv_o(new Function1s::Table<scalar>("pv_o", dict.subDict("pv_o"))),        
+    gl(new Function1s::Table<scalar>("gl", dict.subDict("gl")))                    
 {
     fvPatchScalarField::operator=(scalarField("value", dict, p.size()));
 
@@ -93,16 +93,6 @@ HAMexternalMoistureFluxFvPatchScalarField
         valueFraction() = 1.0;
     }
 }
-
-
-Foam::HAMexternalMoistureFluxFvPatchScalarField::
-HAMexternalMoistureFluxFvPatchScalarField
-(
-    const HAMexternalMoistureFluxFvPatchScalarField& tppsf
-)
-:
-    mixedFvPatchScalarField(tppsf)
-{}
 
 
 Foam::HAMexternalMoistureFluxFvPatchScalarField::

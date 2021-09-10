@@ -107,21 +107,6 @@ public:
             const fvPatchFieldMapper&
         );
 
-        //- Construct as copy
-        HAMexternalImpermeableFvPatchScalarField
-        (
-            const HAMexternalImpermeableFvPatchScalarField&
-        );
-
-        //- Construct and return a clone
-        virtual tmp<fvPatchScalarField> clone() const
-        {
-            return tmp<fvPatchScalarField>
-            (
-                new HAMexternalImpermeableFvPatchScalarField(*this)
-            );
-        }
-
         //- Construct as copy setting internal field reference
         HAMexternalImpermeableFvPatchScalarField
         (

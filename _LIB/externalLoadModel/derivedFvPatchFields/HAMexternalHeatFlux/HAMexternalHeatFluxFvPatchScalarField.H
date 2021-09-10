@@ -57,7 +57,7 @@ SourceFiles
 
 #include "mixedFvPatchFields.H"
 
-#include "TableFile.H"
+#include "Table.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -79,25 +79,25 @@ private:
     // Private data
     
         //- table time vs ambient temperature [K]
-        const autoPtr<Function1s::TableFile<scalar>> Tambient;
+        const autoPtr<Function1s::Table<scalar>> Tambient;
 
         //- table time vs convective heat transfer coefficient [W/m2K]
-        const autoPtr<Function1s::TableFile<scalar>> alpha;
+        const autoPtr<Function1s::Table<scalar>> alpha;
         
         //- table time vs radiative heat flux [W/m2]
-        const autoPtr<Function1s::TableFile<scalar>> rad;   
+        const autoPtr<Function1s::Table<scalar>> rad;   
         
         //- table time vs convective moisture transfer coefficient [s/m]
-        const autoPtr<Function1s::TableFile<scalar>> beta;
+        const autoPtr<Function1s::Table<scalar>> beta;
         
         //- table time vs exterior vapor pressure [Pa]
-        const autoPtr<Function1s::TableFile<scalar>> pv_o;
+        const autoPtr<Function1s::Table<scalar>> pv_o;
         
         //- table time vs rain flux [kg/m2s]
-        const autoPtr<Function1s::TableFile<scalar>> gl;
+        const autoPtr<Function1s::Table<scalar>> gl;
         
         //- table time vs rain temperature [K]
-        const autoPtr<Function1s::TableFile<scalar>> rainTemp;                                     
+        const autoPtr<Function1s::Table<scalar>> rainTemp;                                     
 
 public:
 
@@ -132,21 +132,6 @@ public:
             const DimensionedField<scalar, volMesh>&,
             const fvPatchFieldMapper&
         );
-
-        //- Construct as copy
-        HAMexternalHeatFluxFvPatchScalarField
-        (
-            const HAMexternalHeatFluxFvPatchScalarField&
-        );
-
-        //- Construct and return a clone
-        virtual tmp<fvPatchScalarField> clone() const
-        {
-            return tmp<fvPatchScalarField>
-            (
-                new HAMexternalHeatFluxFvPatchScalarField(*this)
-            );
-        }
 
         //- Construct as copy setting internal field reference
         HAMexternalHeatFluxFvPatchScalarField

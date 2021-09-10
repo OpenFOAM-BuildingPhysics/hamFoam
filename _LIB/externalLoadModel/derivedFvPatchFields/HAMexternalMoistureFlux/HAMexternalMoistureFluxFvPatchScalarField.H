@@ -52,7 +52,7 @@ SourceFiles
 
 #include "mixedFvPatchFields.H"
 
-#include "TableFile.H"
+#include "Table.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -74,13 +74,13 @@ private:
     // Private data  
         
         //- table time vs convective moisture transfer coefficient [s/m]
-        const autoPtr<Function1s::TableFile<scalar>> beta;
+        const autoPtr<Function1s::Table<scalar>> beta;
         
         //- table time vs exterior vapor pressure [Pa]
-        const autoPtr<Function1s::TableFile<scalar>> pv_o;
+        const autoPtr<Function1s::Table<scalar>> pv_o;
         
         //- table time vs rain flux [kg/m2s]
-        const autoPtr<Function1s::TableFile<scalar>> gl; 
+        const autoPtr<Function1s::Table<scalar>> gl; 
 
 public:
 
@@ -116,21 +116,6 @@ public:
             const fvPatchFieldMapper&
         );
 
-        //- Construct as copy
-        HAMexternalMoistureFluxFvPatchScalarField
-        (
-            const HAMexternalMoistureFluxFvPatchScalarField&
-        );
-
-        //- Construct and return a clone
-        virtual tmp<fvPatchScalarField> clone() const
-        {
-            return tmp<fvPatchScalarField>
-            (
-                new HAMexternalMoistureFluxFvPatchScalarField(*this)
-            );
-        }
-
         //- Construct as copy setting internal field reference
         HAMexternalMoistureFluxFvPatchScalarField
         (
@@ -149,7 +134,6 @@ public:
                 new HAMexternalMoistureFluxFvPatchScalarField(*this, iF)
             );
         }
-
 
     // Member functions
 

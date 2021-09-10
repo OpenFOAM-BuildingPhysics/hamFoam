@@ -39,7 +39,7 @@ Description
 #include "fvCFD.H"
 #include "buildingMaterialModel.H"
 #include "mixedFvPatchFields.H"
-#include "TableFile.H"  
+#include "Table.H"  
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
