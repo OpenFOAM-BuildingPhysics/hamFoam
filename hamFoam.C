@@ -34,10 +34,20 @@ Description
 
 \*---------------------------------------------------------------------------*/
 
-#include "fvCFD.H"
+#include "argList.H"
+#include "fvModels.H"
+#include "fvModels.H"
+#include "fvConstraints.H"
+#include "uniformDimensionedFields.H"
+#include "fvc.H"
+#include "fvm.H"
+
 #include "buildingMaterialModel.H"
 #include "mixedFvPatchFields.H"
 #include "Table.H"  
+
+
+using namespace Foam;
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
