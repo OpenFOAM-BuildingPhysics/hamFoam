@@ -8,7 +8,7 @@ hamFoam is mainly intended for the absorption, transport and storage simulations
 
 The solver is tested for the following OpenFOAM versions:
 
-* OpenFOAM-org (OpenFOAM Foundation) v6, v7, v8, v9 
+* OpenFOAM-org (OpenFOAM Foundation) v6, v7, v8, v9, v10, v11
 * OpenFOAM-com (OpenCFD-ESI) v1806
 
 ### Usage
@@ -19,6 +19,8 @@ You can compile the solver for a specific OpenFOAM version by checking out the c
 	cd hamfoam
 	git checkout tags/of-org_v9.0
 	wmake
+
+See the list of tags for different versions [here](https://gitlab.ethz.ch/openfoam-cbp/solvers/hamfoam/-/tags)
 
 ### Documentation
 
