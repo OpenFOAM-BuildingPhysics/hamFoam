@@ -39,7 +39,7 @@ namespace buildingMaterialModels
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-		Hamstad1Insulation,
+        Hamstad1Insulation,
         dictionary
     );
 }

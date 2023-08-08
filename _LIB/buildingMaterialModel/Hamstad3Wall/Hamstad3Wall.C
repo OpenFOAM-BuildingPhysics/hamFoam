@@ -39,7 +39,7 @@ namespace buildingMaterialModels
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-		Hamstad3Wall,
+        Hamstad3Wall,
         dictionary
     );
 }
@@ -69,12 +69,12 @@ Foam::buildingMaterialModels::Hamstad3Wall::Hamstad3Wall
 //- Correct the buildingMaterial moisture content (cell)
 void Foam::buildingMaterialModels::Hamstad3Wall::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
-	List<scalar> reta; reta.setSize(2); reta[0] = 6.0e-3; reta[1] = 1.2e-2;
-	List<scalar> retn; retn.setSize(2); retn[0] = 2.4883; retn[1] = 2.3898;
-	List<scalar> retm; retm.setSize(2); retm[0] = -0.59812; retm[1] = -0.58155;
-	List<scalar> retw; retw.setSize(2); retw[0] = 0.41; retw[1] = 0.59;
-	scalar w_tmp = 0; scalar tmp = 0; scalar C_tmp = 0; scalar tmp2 = 0;
-	for (int i = 0; i <= 1; i++)
+    List<scalar> reta; reta.setSize(2); reta[0] = 6.0e-3; reta[1] = 1.2e-2;
+    List<scalar> retn; retn.setSize(2); retn[0] = 2.4883; retn[1] = 2.3898;
+    List<scalar> retm; retm.setSize(2); retm[0] = -0.59812; retm[1] = -0.58155;
+    List<scalar> retw; retw.setSize(2); retw[0] = 0.41; retw[1] = 0.59;
+    scalar w_tmp = 0; scalar tmp = 0; scalar C_tmp = 0; scalar tmp2 = 0;
+    for (int i = 0; i <= 1; i++)
     {
         tmp = pow( (reta[i]*pc.internalField()[celli]) , retn[i] );
         w_tmp = w_tmp + retw[i] / ( pow( (1 + tmp) , retm[i] ));
@@ -89,33 +89,33 @@ void Foam::buildingMaterialModels::Hamstad3Wall::update_w_C_cell(const volScalar
 void Foam::buildingMaterialModels::Hamstad3Wall::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 
 {
-	List<scalar> a; a.setSize(6); a[0] = -46.245; a[1] = 294.506; a[2] = -1439; a[3] = 3249; a[4] = -3370; a[5] = 1305;
-	scalar rho_w = 1.0e3;
-	scalar tmp = 0;
-	for (int i = 0; i <= 6; i++)
-	{
-		tmp = tmp + (a[i] * pow((w.internalField()[celli] / rho_w), i));
-	}
-	Krel.ref()[celli] = exp(tmp);
+    List<scalar> a; a.setSize(6); a[0] = -46.245; a[1] = 294.506; a[2] = -1439; a[3] = 3249; a[4] = -3370; a[5] = 1305;
+    scalar rho_w = 1.0e3;
+    scalar tmp = 0;
+    for (int i = 0; i <= 6; i++)
+    {
+        tmp = tmp + (a[i] * pow((w.internalField()[celli] / rho_w), i));
+    }
+    Krel.ref()[celli] = exp(tmp);
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
 void Foam::buildingMaterialModels::Hamstad3Wall::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 {
-	scalar rho_l = 1.0e3; 
-	scalar R_v = 8.31451 * 1000 / (18.01534);
+    scalar rho_l = 1.0e3; 
+    scalar R_v = 8.31451 * 1000 / (18.01534);
     scalar L_v = 2.5e6;
-	scalar mu_dry = 5.6;
-	scalar p = 0.2;
-	scalar w_sat = 871;
+    scalar mu_dry = 5.6;
+    scalar p = 0.2;
+    scalar w_sat = 871;
 
-	scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
-	scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
+    scalar p_vsat = Foam::exp(6.58094e1 - 7.06627e3/T.internalField()[celli] - 5.976*Foam::log(T.internalField()[celli])); // saturation vapour pressure [Pa]
+    scalar relhum = Foam::exp(pc.internalField()[celli]/(rho_l*R_v*T.internalField()[celli])); // relative humidity [-]
 
-	scalar tmp = 1 - (w.internalField()[celli] / w_sat);
-	scalar delta = 2.61e-5 * tmp / (R_v*T.internalField()[celli] * mu_dry * ((1-p)*tmp*tmp + p)); // Water vapour diffusion coefficient "for Wall3" [s]
+    scalar tmp = 1 - (w.internalField()[celli] / w_sat);
+    scalar delta = 2.61e-5 * tmp / (R_v*T.internalField()[celli] * mu_dry * ((1-p)*tmp*tmp + p)); // Water vapour diffusion coefficient "for Wall3" [s]
 
-	K_v.ref()[celli] = (delta*p_vsat*relhum) / (rho_l*R_v*T.internalField()[celli]);
+    K_v.ref()[celli] = (delta*p_vsat*relhum) / (rho_l*R_v*T.internalField()[celli]);
     K_pt.ref()[celli] = ( (delta*p_vsat*relhum)/(rho_l*R_v*pow(T.internalField()[celli],2)) ) * (rho_l*L_v - pc.internalField()[celli]);
 
 }

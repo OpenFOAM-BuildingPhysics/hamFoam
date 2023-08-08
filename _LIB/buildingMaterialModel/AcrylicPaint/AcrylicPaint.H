@@ -26,15 +26,15 @@ Class
     Foam::buildingMaterialModels::AcrylicPaint
 
 Description
-	buildingMaterial constitutive relationships as given in
-	Heat-Moisture Transport Simulations according to Carmeliet
-	and Derome's research.
+    buildingMaterial constitutive relationships as given in
+    Heat-Moisture Transport Simulations according to Carmeliet
+    and Derome's research.
 
     Reference:
 
-	Carmeliet, J., & Derome, D. (2011). Temperature Driven Inward Vapor Diffusion Under Constant
-	and Cyclic Loading in Small-Scale Wall Assemblies: Part 2 Heat-Moisture Transport Simulations.
-	Building and Environment. Vol. 47, pp. 161-169
+    Carmeliet, J., & Derome, D. (2011). Temperature Driven Inward Vapor Diffusion Under Constant
+    and Cyclic Loading in Small-Scale Wall Assemblies: Part 2 Heat-Moisture Transport Simulations.
+    Building and Environment. Vol. 47, pp. 161-169
 
 SourceFiles
     AcrylicPaint.C
@@ -75,7 +75,7 @@ public:
     // Constructors
 
         //- Construct from components
-		AcrylicPaint
+        AcrylicPaint
         (
             const word& name, 
             const dictionary& buildingMaterialDict,

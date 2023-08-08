@@ -32,8 +32,6 @@ Description
     Aytac Kubilay, aytac.kubilay@empa.ch, akubilay@ethz.ch
     Andrea Ferrari, andferra@ethz.ch
 
-    Latest Update: 01.08.2019
-
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"

@@ -39,7 +39,7 @@ namespace buildingMaterialModels
     addToRunTimeSelectionTable
     (
         buildingMaterialModel,
-		SBPO,
+        SBPO,
         dictionary
     );
 }
@@ -69,22 +69,22 @@ Foam::buildingMaterialModels::SBPO::SBPO
 //- Correct the buildingMaterial moisture content (cell)
 void Foam::buildingMaterialModels::SBPO::update_w_C_cell(const volScalarField& pc, volScalarField& w, volScalarField& Crel, label& celli)
 {
-	w.ref()[celli] = 0;
-	Crel.ref()[celli] = 0;
+    w.ref()[celli] = 0;
+    Crel.ref()[celli] = 0;
 }
 
 //- Correct the buildingMaterial liquid permeability (cell)
 void Foam::buildingMaterialModels::SBPO::update_Krel_cell(const volScalarField& pc, const volScalarField& w, volScalarField& Krel, label& celli)
 {
-	Krel.ref()[celli] = 0;
+    Krel.ref()[celli] = 0;
 }
 
 //- Correct the buildingMaterial vapor permeability (cell)
 void Foam::buildingMaterialModels::SBPO::update_Kvap_cell(const volScalarField& pc, const volScalarField& w, const volScalarField& T, volScalarField& K_v, volScalarField& K_pt, label& celli)
 
 {
-	K_v.ref()[celli] = 4.99e-13;
-	K_pt.ref()[celli] = 4.99e-13;
+    K_v.ref()[celli] = 4.99e-13;
+    K_pt.ref()[celli] = 4.99e-13;
 }
 
 //*********************************************************** //

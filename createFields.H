@@ -65,7 +65,7 @@ volScalarField Crel
     mesh,
     dimensionedScalar("Crel", dimensionSet(0, -2, 2, 0, 0, 0, 0), scalar(1E-3)),
     ("zeroGradient")
-);	
+);  
 
 volScalarField Krel
 (
@@ -155,7 +155,7 @@ volScalarField lambda_m
     mesh,
     dimensionedScalar("lambda_m", dimensionSet(1,1,-3,-1,0,0,0), scalar(1E-3)),
     ("zeroGradient")
-);             	
+);              
 
 uniformDimensionedVectorField g
 (

@@ -80,7 +80,7 @@ public:
     // Constructors
 
         //- Construct from components
-	Hamstad3Wall
+    Hamstad3Wall
         (
             const word& name, 
             const dictionary& buildingMaterialDict,

@@ -2,7 +2,7 @@ word pcEqnForm =
     runTime.controlDict().lookupOrDefault<word>("pcEqnForm", "pc-based"); 
 
 Switch adjustTimeStep =
-	runTime.controlDict().lookupOrDefault<Switch>("adjustTimeStep",true);
+    runTime.controlDict().lookupOrDefault<Switch>("adjustTimeStep",true);
 
 scalar minCrel =
     runTime.controlDict().lookupOrDefault<scalar>("minCrel", VSMALL); 
@@ -17,10 +17,10 @@ const int nIterPicardMax =
     picardDict.lookupOrDefault<int>("nIterPicardMax", 10);
 
 scalar minDeltaT =
-	picardDict.lookupOrDefault<scalar>("minDeltaT", 0.1);
+    picardDict.lookupOrDefault<scalar>("minDeltaT", 0.1);
 
 scalar maxDeltaT =
-	picardDict.lookupOrDefault<scalar>("maxDeltaT", 600.0);
+    picardDict.lookupOrDefault<scalar>("maxDeltaT", 600.0);
 
 scalar PicardTolerancews =
     picardDict.lookupOrDefault<scalar>("PicardTolerancews", 0.01);
