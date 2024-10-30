@@ -15,12 +15,12 @@ The solver is tested for the following OpenFOAM versions:
 
 You can compile the solver for a specific OpenFOAM version by checking out the commit with corresponding tag. For example, for OpenFOAM v9:
 
-	git clone https://gitlab.ethz.ch/openfoam-cbp/solvers/hamfoam.git
+	git clone https://github.com/OpenFOAM-BuildingPhysics/hamFoam.git
 	cd hamfoam
 	git checkout tags/of-org_v9.0
 	wmake
 
-See the list of tags for different versions [here](https://gitlab.ethz.ch/openfoam-cbp/solvers/hamfoam/-/tags)
+See the list of tags for different versions [here](https://github.com/OpenFOAM-BuildingPhysics/hamFoam/releases/new)
 
 ### Documentation
 
@@ -28,11 +28,11 @@ Read [hamFoam wiki](https://gitlab.ethz.ch/openfoam-cbp/solvers/hamfoam/-/wikis/
 
 ### Tutorial cases
 
-Tutorial cases modeling HAMSTAD Benchmark case 4 (response analysis) and case 5 (capillary active inside insulation) can be found [here](https://gitlab.ethz.ch/openfoam-cbp/tutorials/hamfoam).
+Tutorial cases modeling HAMSTAD Benchmark case 4 (response analysis) and case 5 (capillary active inside insulation) can be found [here](https://github.com/OpenFOAM-BuildingPhysics/hamFoam-tutorials).
 
 ### Validation
 
-The solver results have been compared with the benchmark cases from HAMSTAD (Heat, Air and Moisture StanDardization). Please see [tutorials](https://gitlab.ethz.ch/openfoam-cbp/tutorials/hamfoam) to download and run cases 4 and 5 from HAMSTAD.
+The solver results have been compared with the benchmark cases from HAMSTAD (Heat, Air and Moisture StanDardization). Please see [tutorials](https://github.com/OpenFOAM-BuildingPhysics/hamFoam-tutorials) to download and run cases 4 and 5 from HAMSTAD.
 
 <i>Hagentoft, C-E., 2002. HAMSTAD – Final report: Methodology of HAM-​modeling,
 Report R-​02:8. Gothenburg, Department of Building Physics, Chalmers University
