@@ -20,7 +20,7 @@ You can compile the solver for a specific OpenFOAM version by checking out the c
 	git checkout tags/of-org_v9.0
 	wmake
 
-See the list of tags for different versions [here](https://github.com/OpenFOAM-BuildingPhysics/hamFoam/releases/new)
+See the list of tags for different versions [here](https://github.com/OpenFOAM-BuildingPhysics/hamFoam/tags)
 
 ### Documentation
 
