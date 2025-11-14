@@ -198,19 +198,32 @@ void Foam::HAMexternalHeatFluxFvPatchScalarField::updateCoeffs()
             }
             CR[faceI] = rainFlux * cap_l*(rainTemp->value(time.value()) - Tref);
         }
-    }    
+    }
 
     if(fieldpc.type() == "HAMexternalImpermeable")
     {
-        valueFraction() = 0;
-        refValue() = 0;
-        refGrad() = (q_conv + rad->value(time.value()))/(lambda_m);
+        scalar h_ = alpha->value(time.value());
+        refValue() = Tambient->value(time.value()) + rad->value(time.value()) / h_;
+        refGrad() = 0;
+
+        const scalarField kappaDeltaCoeffs
+        (
+            lambda_m * patch().deltaCoeffs()
+        );
+        valueFraction() = h_ / (h_ + kappaDeltaCoeffs);
     }
     else
-    {    
-        refGrad() = (q_conv + LE + rad->value(time.value()) + CR + phiGT - X)/(lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt);
-        refValue() =  0;
-        valueFraction() = 0.0;
+    {
+        scalar h_ = alpha->value(time.value());
+        scalarField q_ext = LE + rad->value(time.value()) + CR + phiGT - X;
+        refValue() = Tambient->value(time.value()) + q_ext / h_;
+        refGrad() = 0;
+
+        const scalarField kappaDeltaCoeffs
+        (
+            (lambda_m+(cap_v*(Tp-Tref)+L_v)*K_pt) * patch().deltaCoeffs()
+        );
+        valueFraction() = h_ / (h_ + kappaDeltaCoeffs);
     }
 
     mixedFvPatchScalarField::updateCoeffs();
